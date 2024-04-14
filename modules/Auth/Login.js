@@ -1,4 +1,4 @@
-// HomeScreen.js
+
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
@@ -12,6 +12,7 @@ export default function Login() {
   const[password,setPassword]=useState("")
   const[error,setError]=useState("")
   const[token,setToken]=useState("")
+  const[storedUsername,setstoredUsername]=useState("")
   const handlePushChat = () => {
     navigation.navigate('Home');
   }
@@ -22,12 +23,19 @@ export default function Login() {
 const checkUser =async()=>{
   try {
     const storedToken = await AsyncStorage.getItem('token');
+   
+
+    //const storedUsername = await AsyncStorage.getItem('username');
     if (storedToken !== null) {
         // Token is retrieved successfully
+        
         handlePushChat()
+      
     } else{
       await AsyncStorage.setItem('token',token);  
+    
       handlePushChat() 
+     
     }
 } catch (error) {
     // Error retrieving data
@@ -59,6 +67,11 @@ const checkUser =async()=>{
     if (response) {
       console.log(response)
       setToken(response.token)
+      await AsyncStorage.setItem('username',response.name);
+      setstoredUsername()
+      console.log(response.name)
+
+      
     }
    
     if (response.error) {
@@ -75,6 +88,7 @@ const checkUser =async()=>{
                 value={username}
                 onChangeText={setUsername}
             />
+            <Text>{storedUsername}</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Mật khẩu"

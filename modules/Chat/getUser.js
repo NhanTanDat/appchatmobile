@@ -51,6 +51,7 @@ const GetUser = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
@@ -70,14 +71,14 @@ const styles = StyleSheet.create({
   },
   selectedUserView: {
     position: 'absolute',
-    top: 20,
-    left: 20,
+ 
+width:'100%',
   //  backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 10,
     borderRadius: 8,
     backgroundColor: 'red',
-    marginTop:"300",
-    marginLeft:"100"
+    marginTop:"9%",
+    marginLeft:"100",justifyContent:"center",alignItems:"center"
   },
   selectedUserText: {
     fontSize: 14,

@@ -20,7 +20,7 @@ export default function Home() {
                 />
                 <Button
                     title="Go to Chat"
-                    onPress={() => navigation.navigate('Chat')}
+                    onPress={() => navigation.navigate('Message')}
                 />
             </View>
         </View>
