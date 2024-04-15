@@ -1,43 +1,81 @@
 // DetailsScreen.js
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Home() {
     const navigation = useNavigation();
 
     return (
+        <View style={styles.background}>
         <View style={styles.container}>
-            <Text>Home Screen</Text>
+        <Icon name="user-circle" size={50} color="#007bff" style={styles.icon} />   
+            <Text style={styles.title}> Welcome To Hallo</Text>
             <View style={styles.buttonContainer}>
-                <Button
-                    title="Go to Register"
-                    onPress={() => navigation.navigate('Register')}
-                />
-                <Button
-                    title="Go to Login"
+                <TouchableOpacity
+                    style={styles.button}
                     onPress={() => navigation.navigate('Login')}
-                />
-                <Button
-                    title="Go to Chat"
-                    onPress={() => navigation.navigate('Message')}
-                />
+                >
+                    <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Register')}
+                >
+                    <Text style={styles.buttonText}>Register</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Chat')}
+                >
+                    <Text style={styles.buttonText}>Chat</Text>
+                </TouchableOpacity>
             </View>
         </View>
-    );
-}
+    </View>
+    
+   );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    buttonContainer: {
-        position: 'absolute',
-        bottom: 20,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-    },
+background: {
+    flex: 1,
+    backgroundColor: '#b2dfdb',
+
+},
+container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+},
+icon: {
+    marginBottom: 20,
+},
+title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#OOO',
+    marginBottom: 35,
+    textAlign: 'center',
+},
+buttonContainer: {
+    width: '100%',
+    alignItems: 'center',
+},
+button: {
+    backgroundColor: '#007bff',
+    width: 127,
+    height: 127,
+    borderRadius: 127,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+},
+buttonText: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+},
 });
