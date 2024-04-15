@@ -8,14 +8,16 @@ const Register = () => {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [phone, setPhone] = useState("");
     const [error, setError] = useState(null);
     const navigation = useNavigation();
 
     const handlePushChat = () => {
-      navigation.navigate('Chat');
+      navigation.navigate('Message');
     }
 
     const handleRegister = () => {
+        console.log(phone);
         console.log(name);
         console.log(username);
         console.log(password);
@@ -24,7 +26,7 @@ const Register = () => {
        
     }
       const fetchDataRegister = async () => {
-        const apiUrl = 'http://localhost:5000/api/users/register';
+        const apiUrl = 'http://localhost:3000/api/users/register';
         const headers = {
             'Content-Type': 'application/json; charset=utf-8',
             // 'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUYW4gRGF0Iiwic3ViIjoiNjVlNzM2MTk1MDA5ZTQ2ZWE4ZTE0Zjc0IiwiaWF0IjoxNzA5NjUxNTE5NTY0LCJleHAiOjE3MDk4MjQzMTk1NjR9.-JXf68b7vaUQpTtkK5Z_A0QkoalNlUwWvdldiXMlnPM'
@@ -32,7 +34,8 @@ const Register = () => {
         const requestBody = {
             name: name,
             email: username,
-            password: password
+            password: password,
+            phone:phone
         };
         const response = await postRequest(
           apiUrl,
@@ -40,7 +43,7 @@ const Register = () => {
         );
         
        
-        if (response) {
+        if (!response.error) {
           console.log(response)
           await AsyncStorage.setItem('token', response.token);
           handlePushChat()
@@ -62,6 +65,12 @@ const Register = () => {
             />
             <TextInput
                 style={styles.input}
+                placeholder="Số điện thoại"
+                value={phone}
+                onChangeText={setPhone}
+            />
+            <TextInput
+                style={styles.input}
                 placeholder="Tên đăng nhập"
                 value={username}
                 onChangeText={setUsername}
@@ -73,6 +82,7 @@ const Register = () => {
                 value={password}
                 onChangeText={setPassword}
             />
+            
             {error && ( <Text style={error ?  {margin: "20px"} : {margin: "0px"} }>
             {error}
             </Text>)}
