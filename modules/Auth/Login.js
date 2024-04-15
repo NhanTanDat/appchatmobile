@@ -48,7 +48,7 @@ const checkUser =async()=>{
 
   },[])
   const fetchDataLogin = async () => {
-    console.log("a  x")
+    console.log("1")
     const apiUrl = 'http://localhost:3000/api/users/login';
     const headers = {
         'Content-Type': 'application/json; charset=utf-8',
@@ -56,7 +56,7 @@ const checkUser =async()=>{
     };
     const requestBody = {
        
-        email: username,
+      emailOrPhone: username,
         password: password
     };
     const response = await postRequest(
@@ -69,12 +69,13 @@ const checkUser =async()=>{
       setToken(response.token)
       await AsyncStorage.setItem('username',response.name);
       setstoredUsername()
-      console.log(response.name)
+      
 
       
     }
    
     if (response.error) {
+      console.log(response)
       console.log(username)
       console.log(password)
       
@@ -87,7 +88,7 @@ const checkUser =async()=>{
     <View style={styles.container}>
       <TextInput
                 style={styles.input}
-                placeholder="Tên đăng nhập"
+                placeholder="email hoặc số điện thoại"
                 value={username}
                 onChangeText={setUsername}
             />
@@ -100,6 +101,9 @@ const checkUser =async()=>{
                 onChangeText={setPassword}
                
             />
+            {error && ( <Text style={error ?  {margin: "20px"} : {margin: "0px"} }>
+            {error}
+            </Text>)}
     
     <Button title="Login" onPress={fetchDataLogin}/>
     <Button title="Register" onPress={handlePushRegister}/>
