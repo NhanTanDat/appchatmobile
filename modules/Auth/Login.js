@@ -1,7 +1,7 @@
 
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { baseUrl, postRequest } from "../service"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -20,22 +20,30 @@ export default function Login() {
   const handlePushRegister = () => {
     navigation.navigate('Register');
   }
+  
+
+
+
 const checkUser =async()=>{
   try {
     const storedToken = await AsyncStorage.getItem('token');
    
 
     //const storedUsername = await AsyncStorage.getItem('username');
-    if (storedToken !== null) {
+    if (storedToken !== null && storedToken !== 0 && storedToken !== '') {
         // Token is retrieved successfully
-        
         handlePushChat()
       
     } else{
+      //Không có token( đăng nhập lần đầu)
+
       await AsyncStorage.setItem('token',token);  
-    
-      handlePushChat() 
-     
+      const storedToken1 = await AsyncStorage.getItem('token');
+      if(storedToken1 !== null && storedToke1 !== 0 && storedToken1 !== ''){
+        handlePushChat() 
+      }else{
+        handleLogin()
+      }
     }
 } catch (error) {
     // Error retrieving data
@@ -65,13 +73,14 @@ const checkUser =async()=>{
     );
     
     if (!response.error) {
+      await AsyncStorage.setItem('token', response.token);
+
       console.log(response)
       setToken(response.token)
-      await AsyncStorage.setItem('username',response.name);
       setstoredUsername()
       
 
-      
+ 
     }
    
     if (response.error) {
@@ -85,29 +94,41 @@ const checkUser =async()=>{
     checkUser();
   }
   return (
-    <View style={styles.container}>
-      <TextInput
-                style={styles.input}
-                placeholder="email hoặc số điện thoại"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <Text>{storedUsername}</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Mật khẩu"
-                secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
-               
-            />
-            {error && ( <Text style={error ?  {margin: "20px"} : {margin: "0px"} }>
-            {error}
-            </Text>)}
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, backgroundColor: '#f0f0f0', borderRadius: 20 }}>
+  <TextInput
+    style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
+    placeholder="email hoặc số điện thoại"
+    value={username}
+    onChangeText={setUsername}
+  />
+  <Text>{storedUsername}</Text>
+  <TextInput
+    style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
+    placeholder="Mật khẩu"
+    secureTextEntry={true}
+    value={password}
+    onChangeText={setPassword}
+  />
+  {error && <Text style={{ marginVertical: 20, color: 'red', textAlign: 'center' }}>{error}</Text>}
+  <TouchableOpacity
+    style={{ width: '100%', height: 40, marginBottom: 10, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
+    onPress={fetchDataLogin}
+  >
+    <Text style={{ color: '#fff', fontSize: 16 }}>Login</Text>
+  </TouchableOpacity>
+  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+    <TouchableOpacity
+      style={{ width: '48%', height: 40, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
+      onPress={handlePushRegister}
+    >
+      <Text style={{ color: '#fff', fontSize: 16 }}>Register</Text>
+    </TouchableOpacity>
+   
+  </View>
+</View>
+
+
     
-    <Button title="Login" onPress={fetchDataLogin}/>
-    <Button title="Register" onPress={handlePushRegister}/>
-    </View>
   );
 };
 

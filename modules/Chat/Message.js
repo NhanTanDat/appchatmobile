@@ -1,9 +1,9 @@
 
 import React, { useState,useEffect } from 'react';
 import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView } from 'react-native';
-import GetUser from './getUser';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ChatBox from './ChatBox';
+
 
 
 const Message = () => {
@@ -48,7 +48,7 @@ const Message = () => {
     <View style={styles.container}>
       
       <Text>Hallo{username}</Text>
-      <View> <GetUser/></View>
+      
      
       <View style={{ flex: 1, padding: 10 }}>
         <ScrollView>

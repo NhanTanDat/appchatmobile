@@ -10,6 +10,7 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [error, setError] = useState(null);
+   
     const navigation = useNavigation();
 
     const handlePushChat = () => {
@@ -27,11 +28,10 @@ const Register = () => {
     }
       const fetchDataRegister = async () => {
         const apiUrl = 'http://localhost:3000/api/users/register';
-        const headers = {
-            'Content-Type': 'application/json; charset=utf-8',
-            // 'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUYW4gRGF0Iiwic3ViIjoiNjVlNzM2MTk1MDA5ZTQ2ZWE4ZTE0Zjc0IiwiaWF0IjoxNzA5NjUxNTE5NTY0LCJleHAiOjE3MDk4MjQzMTk1NjR9.-JXf68b7vaUQpTtkK5Z_A0QkoalNlUwWvdldiXMlnPM'
-        };
+    
+
         const requestBody = {
+            
             name: name,
             email: username,
             password: password,
@@ -46,10 +46,12 @@ const Register = () => {
         if (!response.error) {
           console.log(response)
           await AsyncStorage.setItem('token', response.token);
+          
           handlePushChat()
         }
        
         if (response.error) {
+        
           console.log(response.message)
           return setError(response.message);
         }

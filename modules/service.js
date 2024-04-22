@@ -1,10 +1,15 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export const baseUrl = "http://localhost:3000/api";
 
 export const postRequest = async (url, body) => {
+  const token = await AsyncStorage.getItem('token');
   const response = await fetch(url, {
+    
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      'Authorization':token
     },
     body,
   });
@@ -27,6 +32,8 @@ export const postRequest = async (url, body) => {
 };
 
 export const getRequest = async (url) => {
+  
+
   const response = await fetch(url);
 
   const data = await response.json();
