@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { baseUrl, postRequest } from "../service";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { postRequest } from "../service";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,84 +15,75 @@ const Register = () => {
     const navigation = useNavigation();
 
     const handlePushChat = () => {
-      navigation.navigate('Message');
+        navigation.navigate('Message');
     }
 
-    const handleRegister = () => {
-        console.log(phone);
-        console.log(name);
-        console.log(username);
-        console.log(password);
-        // Call the function to register the user
-        fetchDataRegister();
-       
-    }
-      const fetchDataRegister = async () => {
+    const handleRegister = async () => {
         const apiUrl = 'http://localhost:3000/api/users/register';
-    
+        const requestBody = JSON.stringify({ name, email: username, password, phone });
 
-        const requestBody = {
-            
-            name: name,
-            email: username,
-            password: password,
-            phone:phone
-        };
-        const response = await postRequest(
-          apiUrl,
-          JSON.stringify(requestBody)
-        );
-        
-       
-        if (!response.error) {
-          console.log(response)
-          await AsyncStorage.setItem('token', response.token);
-          
-          handlePushChat()
-        }
-       
-        if (response.error) {
-        
-          console.log(response.message)
-          return setError(response.message);
+        try {
+            const response = await postRequest(apiUrl, requestBody);
+
+            if (!response.error) {
+                await AsyncStorage.setItem('token', response.token);
+                handlePushChat();
+            } else {
+                setError(response.message);
+            }
+        } catch (error) {
+            console.error('There was a problem with the registration:', error);
+            setError('An error occurred while registering. Please try again later.');
         }
     }
+
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>User Registration</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Tên"
-                value={name}
-                onChangeText={setName}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Số điện thoại"
-                value={phone}
-                onChangeText={setPhone}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Tên đăng nhập"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Mật khẩu"
-                secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
-            />
-            
-            {error && ( <Text style={error ?  {margin: "20px"} : {margin: "0px"} }>
-            {error}
-            </Text>)}
-            <Button
-                title="Register"
+            <Text style={styles.title}>User Registration</Text>
+            <View style={styles.inputContainer}>
+                <Icon name="user" size={20} color="#007bff" style={styles.inputIcon} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={setName}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Icon name="phone" size={20} color="#007bff" style={styles.inputIcon} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Phone Number"
+                    value={phone}
+                    onChangeText={setPhone}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Icon name="user" size={20} color="#007bff" style={styles.inputIcon} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Username"
+                    value={username}
+                    onChangeText={setUsername}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Icon name="lock" size={20} color="#007bff" style={styles.inputIcon} />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    value={password}
+                    onChangeText={setPassword}
+                />
+            </View>
+            {error && <Text style={styles.error}>{error}</Text>}
+            <TouchableOpacity
+                style={styles.button}
                 onPress={handleRegister}
-            />
+            >
+                <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -102,19 +94,48 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
+        backgroundColor: '#f0f8ff', // Light blue background
     },
-    heading: {
+    title: {
         fontSize: 24,
         marginBottom: 20,
+        color: '#007bff', // Blue text color
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#007bff', // Blue border color
+        borderRadius: 5,
+        paddingHorizontal: 10,
+    },
+    inputIcon: {
+        marginRight: 10,
     },
     input: {
+        flex: 1,
+        height: 40,
+        color: '#007bff', // Blue input text color
+    },
+    button: {
+        backgroundColor: '#007bff', // Blue button background color
         width: '100%',
         height: 40,
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    buttonText: {
+        color: '#fff', // White button text color
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    error: {
+        color: 'red',
+        marginTop: 10,
     },
 });
 

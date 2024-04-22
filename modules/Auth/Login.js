@@ -44,6 +44,8 @@ const checkUser =async()=>{
       }else{
         handleLogin()
       }
+
+
     }
 } catch (error) {
     // Error retrieving data
