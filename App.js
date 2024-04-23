@@ -26,7 +26,7 @@ export default function App() {
       <Stack.Navigator>
         
         <Stack.Screen name="Login"  component={Login} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Message" component={Message} />
           

@@ -127,7 +127,7 @@ useEffect(() => {
 )}
 
 {registerError && (
-  <Text>Error: {JSON.stringify(registerError)}</Text>
+  <Text>Error: {response.message}</Text>
 )}
     </View>
   )
