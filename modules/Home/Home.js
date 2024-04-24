@@ -5,19 +5,15 @@
 // import AddfriendModal from './AddfriendModal';
 // import { postRequest } from '../service';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
- import Icon1 from 'react-native-vector-icons/AntDesign'; 
+import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons'; 
  import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // export default function Home() {
 
 
-//     const navigation = useNavigation();
-//     const [user, setUser] = useState(null);  const [userData, setUserData] = useState(null);
-//     const [friendRequest, setfriendRequest] = useState([{},{}]);
-//     const [isModalVisible, setModalVisible] = useState(false);
-//     const token = localStorage.getItem('token');
-
+   
 
     // const handleLogout = async () => {
     //     try {
@@ -30,46 +26,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 //     const toggleModal = () => {
 //         setModalVisible(!isModalVisible);
 //     };
-//     const sendTokentoServer = async () => {
-//         console.log("1")
-//         const apiUrl = 'http://localhost:3000/api/users/userInfo';
-       
-//         const requestBody = {
-           
-//           token:token
-//         };
-//         const response = await postRequest(
-//           apiUrl,
-//           JSON.stringify(requestBody)
-//         );
-        
-//         if (!response.error) {
-//             setUserData(response)
-//             await AsyncStorage.setItem('_id',response._id);
-//             await AsyncStorage.setItem('User',response.name);
-//             console.log('====================================');
-           
-//             console.log('====================================');
-//           console.log(response)
-
-         
-          
     
-     
-//         }
-       
-//         if (response.error) {
-//           console.log(response)
-         
-
-//         }
-        
-//       }
    
-//       useEffect(()=>{
-//         sendTokentoServer();
-    
-//       },[])
+     
 //     return (
 //         <View style={{
 //             flex: 1,
@@ -114,25 +73,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 //                     color="#007AFF"
 //                 />
 //             </View>
-//             <View>
-//             {userData ? (
-//         <>
-        
-//           <Text>Thông tin người dùng:</Text>
-//           <Text>ID: {userData._id}</Text>
-//           <Text>Name: {userData.name}</Text>
-//           <Text>Email: {userData.email}</Text>
-//           <Text>Phone Number: {userData.phone}</Text>
           
-          
-          
-          
-
-//         </>
-//       ) : (
-//         <Text>Đang tải thông tin người dùng...</Text>
-//       )}
-//             </View>
 
 //             <Modal
 //                 animationType="slide"
@@ -179,6 +120,8 @@ import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Message from '../Chat/Message';
+import ProfileScreen from './ProfileScreen';
+import AddfriendModal from './AddfriendModal';
 
 function Screen1() {
   return (
@@ -232,10 +175,22 @@ export default function App() {
     <View style={styles.container}>
       
         <Tab.Navigator>
-          <Tab.Screen name="Message" component={Message} />
-          <Tab.Screen name="Screen2" component={Screen2} />
+          <Tab.Screen name="Message" component={Message}  options={{
+      tabBarIcon: ({ color, size }) => (
+        <Icon1 name="facebook-messenger" size={size} color={color} /> // Example: Using the Facebook brand icon
+      ),
+    }}  />
+          <Tab.Screen name="Thêm Bạn" component={AddfriendModal} options={{
+      tabBarIcon: ({ color, size }) => (
+        <Icon2 name="adduser" size={size} color={color} /> // Example: Using the Facebook brand icon
+      ),
+    }}  />
           <Tab.Screen name="Screen3" component={Screen3} />
-          <Tab.Screen name="Screen4" component={Screen4} />
+          <Tab.Screen name="My Info" component={ProfileScreen} options={{
+      tabBarIcon: ({ color, size }) => (
+        <Icon name="user" size={size} color={color} /> // Example: Using the Facebook brand icon
+      ), headerTitle: 'Thông Tin Tài Khoản',
+    }} />
         </Tab.Navigator>
     
     </View>

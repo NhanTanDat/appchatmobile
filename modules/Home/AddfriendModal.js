@@ -91,34 +91,60 @@ function AddfriendModal() {
     }
   };
 
-  return (
-    <ScrollView style={{ width: "100%", height: "100%" }}>
-      <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Enter phone, name, or email"
-            value={searchQuery}
-            onChangeText={handleSearch}
-            style={styles.input}
-          />
-          {searchQuery !== '' && !isLoading ? (
-            <FlatList
-              data={searchResults}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={renderItem}
-              style={styles.list}
-            />
-          ) : null}
-          {isLoading ? <ActivityIndicator size="small" /> : null}
-        </View>
-        <Text>{responseMessage}</Text>
-        <View style={{ width: '100%', height: '100%', flex: 1 }}>
-          <FriendRequest></FriendRequest>
-          <IntroduceUser></IntroduceUser>
-        </View>
+   return (
+  //   <ScrollView style={{ width: "100%", height: "100%" }}>
+  //     <View style={styles.container}>
+  //       <View style={styles.searchContainer}>
+  //         <TextInput
+  //           placeholder="Enter phone, name, or email"
+  //           value={searchQuery}
+  //           onChangeText={handleSearch}
+  //           style={styles.input}
+  //         />
+  //         {searchQuery !== '' && !isLoading ? (
+  //           <FlatList
+  //             data={searchResults}
+  //             keyExtractor={(item, index) => index.toString()}
+  //             renderItem={renderItem}
+  //             style={styles.list}
+  //           />
+  //         ) : null}
+  //         {isLoading ? <ActivityIndicator size="small" /> : null}
+  //       </View>
+  //       <Text>{responseMessage}</Text>
+  //       <View style={{ width: '100%', height: '100%', flex: 1 }}>
+  //         <FriendRequest></FriendRequest>
+  //         <IntroduceUser></IntroduceUser>
+  //       </View>
        
-      </View>
-    </ScrollView>
+  //     </View>
+  //   </ScrollView>
+  <ScrollView style={{ width: "100%", height: "100%" }}>
+  <View style={styles.container}>
+    <View style={styles.searchContainer}>
+      <TextInput
+        placeholder="Enter phone, name, or email"
+        value={searchQuery}
+        onChangeText={handleSearch}
+        style={styles.input}
+      />
+      {searchQuery !== '' && !isLoading ? (
+        <FlatList
+          data={searchResults}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          style={styles.list}
+        />
+      ) : null}
+      {isLoading ? <ActivityIndicator size="small" /> : null}
+    </View>
+    <Text>{responseMessage}</Text>
+    <View style={{ width: '100%', height: '100%', flex: 1 }}>
+      <FriendRequest></FriendRequest>
+      <IntroduceUser></IntroduceUser>
+    </View>
+  </View>
+</ScrollView>
   );
 }
 
@@ -126,9 +152,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     backgroundColor: 'blue',
-    width: '90%',
+    width: '100%',
+    height:"100%"
   },
   searchContainer: {
     flexDirection: 'column',

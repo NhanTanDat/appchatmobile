@@ -12,6 +12,8 @@ export default function Login() {
   const[password,setPassword]=useState("")
   const[error,setError]=useState("")
   const[token,setToken]=useState("")
+
+  const[token1,setToken1]=useState("")
   const[storedUsername,setstoredUsername]=useState("")
   const handlePushChat = () => {
     navigation.navigate('Home');

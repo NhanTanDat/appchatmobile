@@ -114,7 +114,7 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       
-        <Text style={{fontWeight:"800",width:"100%"}}>Lời mời kết bạn cần xác nhận:</Text>
+        <Text style={{fontWeight:"bold",width:"100%"}}>Lời mời kết bạn cần xác nhận:</Text>
         {isRegisterLoading ? (
   <Text>Loading...</Text>
 ) : (
