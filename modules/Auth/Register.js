@@ -15,7 +15,7 @@ const Register = () => {
     const navigation = useNavigation();
 
     const handlePushChat = () => {
-        navigation.navigate('Message');
+        navigation.navigate('Login');
     }
 
     const handleRegister = async () => {

@@ -12,8 +12,6 @@ export default function Login() {
   const[password,setPassword]=useState("")
   const[error,setError]=useState("")
   const[token,setToken]=useState("")
-
-  const[token1,setToken1]=useState("")
   const[storedUsername,setstoredUsername]=useState("")
   const handlePushChat = () => {
     navigation.navigate('Home');
@@ -44,7 +42,7 @@ const checkUser =async()=>{
       if(storedToken1 !== null && storedToke1 !== 0 && storedToken1 !== ''){
         handlePushChat() 
       }else{
-        handleLogin()
+       
       }
 
 
@@ -81,6 +79,9 @@ const checkUser =async()=>{
 
       console.log(response)
       setToken(response.token)
+      console.log('====================================');
+      console.log();
+      console.log('====================================');
       setstoredUsername()
       
 

@@ -12,6 +12,7 @@ const ProfileScreen = () => {
     const [user, setUser] = useState(null);  const [userData, setUserData] = useState(null);
     const [friendRequest, setfriendRequest] = useState([{},{}]);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [background,setBackground] = useState(false);
     const token = localStorage.getItem('token');
 
   
@@ -31,7 +32,9 @@ const ProfileScreen = () => {
     );
     
     if (!response.error) {
+      setBackground(response.avatar)
         setUserData(response)
+       
         await AsyncStorage.setItem('_id',response._id);
         await AsyncStorage.setItem('User',response.name);
         console.log('====================================');
@@ -72,7 +75,7 @@ const ProfileScreen = () => {
         <>
         <View style={{width:"100%", height:"35%",alignItems:"center", justifyContent:"center"}}>
         <Image
-        source={require('./ẢnhNền.jpg')} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
+      source={{ uri: background }} // Sử dụng uri để đường dẫn là một chuỗi URL
         style={styles.image} // Kiểu của ảnh
       />
         </View>
@@ -80,7 +83,7 @@ const ProfileScreen = () => {
   <View style={{ width: "100%", flexDirection: "row", marginLeft: "5%" }}>
     <View style={{ width: "45%" }}> {/* Đã thay đổi margin thành 45% */}
       <Image
-        source={require('./Avatar.jpg')} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
+        source={{ uri: background }} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
         style={styles.avatar} // Kiểu của ảnh
       />
     </View>
@@ -89,7 +92,7 @@ const ProfileScreen = () => {
     </View>
   </View>
   <View style={{ marginTop: "1%", backgroundColor: "white", alignItems: "flex-start", justifyContent: "center", width: "100%" }}>
-    
+    <Text>{userData.avatar}</Text>
       <Text style={styles.info}><Text style={{fontWeight:"bold"}}>Thông Tin Cá Nhân</Text> </Text> {/* Đã sử dụng % cho fontSize */}
       <Text style={styles.space}>{'\u00A0'}</Text> {/* Thẻ khoảng trắng */}
       <Text style={styles.info}><Text style={{ fontWeight: 'bold' }}>Ngày sinh:</Text> 20 tháng 02, 2002</Text>
