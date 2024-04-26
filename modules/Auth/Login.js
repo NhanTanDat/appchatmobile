@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { baseUrl, postRequest } from "../service"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import thư viện icon
 export default function Login() {
   const navigation = useNavigation();
 
@@ -99,37 +99,73 @@ const checkUser =async()=>{
     checkUser();
   }
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, backgroundColor: '#f0f0f0', borderRadius: 20 }}>
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, backgroundColor: '#f0f0f0', borderRadius: 20 }}>
+//   <TextInput
+//     style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
+//     placeholder="email hoặc số điện thoại"
+//     value={username}
+//     onChangeText={setUsername}
+//   />
+//   <Text>{storedUsername}</Text>
+//   <TextInput
+//     style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
+//     placeholder="Mật khẩu"
+//     secureTextEntry={true}
+//     value={password}
+//     onChangeText={setPassword}
+//   />
+//   {error && <Text style={{ marginVertical: 20, color: 'red', textAlign: 'center' }}>{error}</Text>}
+//   <TouchableOpacity
+//     style={{ width: '100%', height: 40, marginBottom: 10, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
+//     onPress={fetchDataLogin}
+//   >
+//     <Text style={{ color: '#fff', fontSize: 16 }}>Login</Text>
+//   </TouchableOpacity>
+//   <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+//     <TouchableOpacity
+//       style={{ width: '48%', height: 40, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
+//       onPress={handlePushRegister}
+//     >
+//       <Text style={{ color: '#fff', fontSize: 16 }}>Register</Text>
+//     </TouchableOpacity>
+   
+//   </View>
+// </View>
+<View style={styles.container}>
+<Icon name="comments" size={60} color="#007AFF" style={styles.icon} /> {/* Thêm icon xin chào */}
+<Text style={styles.welcomeText}>Welcome to HALLO</Text>
+<View style={styles.inputContainer}>
+  <Icon name="user" size={24} color="#999" style={styles.inputIcon} /> {/* Thêm icon vào ô nhập */}
   <TextInput
-    style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
-    placeholder="email hoặc số điện thoại"
+    style={styles.input}
+    placeholder="Email hoặc số điện thoại"
     value={username}
     onChangeText={setUsername}
   />
-  <Text>{storedUsername}</Text>
+</View>
+<View style={styles.inputContainer}>
+  <Icon name="lock" size={24} color="#999" style={styles.inputIcon} /> {/* Thêm icon vào ô nhập */}
   <TextInput
-    style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
+    style={styles.input}
     placeholder="Mật khẩu"
     secureTextEntry={true}
     value={password}
     onChangeText={setPassword}
   />
-  {error && <Text style={{ marginVertical: 20, color: 'red', textAlign: 'center' }}>{error}</Text>}
-  <TouchableOpacity
-    style={{ width: '100%', height: 40, marginBottom: 10, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
-    onPress={fetchDataLogin}
-  >
-    <Text style={{ color: '#fff', fontSize: 16 }}>Login</Text>
+</View>
+{error ? <Text style={styles.error}>{error}</Text> : null}
+<TouchableOpacity
+  style={styles.loginButton}
+  onPress={fetchDataLogin}
+>
+  <Text style={styles.loginButtonText}>Login</Text>
+</TouchableOpacity>
+<View style={styles.registerContainer}>
+  <Text style={styles.registerText}>Chưa có tài khoản?</Text>
+  <TouchableOpacity onPress={handlePushRegister}>
+    <Text style={[styles.registerText, { color: '#007AFF', marginLeft: 5 }]}>Đăng ký</Text>
   </TouchableOpacity>
-  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-    <TouchableOpacity
-      style={{ width: '48%', height: 40, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
-      onPress={handlePushRegister}
-    >
-      <Text style={{ color: '#fff', fontSize: 16 }}>Register</Text>
-    </TouchableOpacity>
-   
-  </View>
+</View>
 </View>
 
 
@@ -144,13 +180,66 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  input: {
-    width: '100%',
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+  icon: {
     marginBottom: 20,
+  },
+  welcomeText: {
+    fontSize: 32, // Increase font size
+    marginBottom: 20,
+    fontWeight: 'bold',
+    color: '#333', // Change text color
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    marginBottom: 20,
+    width: '80%', // Reduce width to 80% for better layout
     paddingHorizontal: 10,
   },
+  inputIcon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
+    fontSize: 16,
+  },
+  error: {
+    marginBottom: 20,
+    color: 'red',
+    textAlign: 'center',
+  },
+  loginButton: {
+    width: '80%',
+    height: 40,
+    marginBottom: 20,
+    borderRadius: 5,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    width: '80%',
+    justifyContent: 'center',
+  },
+  registerText: {
+    fontSize: 14,
+  },
+  // input: {
+  //   width: '100%',
+  //   height: 40,
+  //   borderColor: 'gray',
+  //   borderWidth: 1,
+  //   marginBottom: 20,
+  //   paddingHorizontal: 10,
+  // },
 });
 

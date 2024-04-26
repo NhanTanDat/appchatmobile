@@ -12,7 +12,10 @@ const ProfileScreen = () => {
     const [user, setUser] = useState(null);  const [userData, setUserData] = useState(null);
     const [friendRequest, setfriendRequest] = useState([{},{}]);
     const [isModalVisible, setModalVisible] = useState(false);
-    const [background,setBackground] = useState(false);
+    const [background,setBackground] = useState("");
+
+    const[avatar,setAvatar]=useState("")
+
     const token = localStorage.getItem('token');
 
   
@@ -32,7 +35,8 @@ const ProfileScreen = () => {
     );
     
     if (!response.error) {
-      setBackground(response.avatar)
+      setAvatar(response.avatar)
+      setBackground(response.background)
         setUserData(response)
        
         await AsyncStorage.setItem('_id',response._id);
@@ -41,6 +45,7 @@ const ProfileScreen = () => {
        
         console.log('====================================');
       console.log(response)
+      console.log(background)
 
      
       
@@ -83,7 +88,7 @@ const ProfileScreen = () => {
   <View style={{ width: "100%", flexDirection: "row", marginLeft: "5%" }}>
     <View style={{ width: "45%" }}> {/* Đã thay đổi margin thành 45% */}
       <Image
-        source={{ uri: background }} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
+        source={{ uri: avatar }} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
         style={styles.avatar} // Kiểu của ảnh
       />
     </View>
@@ -92,7 +97,8 @@ const ProfileScreen = () => {
     </View>
   </View>
   <View style={{ marginTop: "1%", backgroundColor: "white", alignItems: "flex-start", justifyContent: "center", width: "100%" }}>
-    <Text>{userData.avatar}</Text>
+
+
       <Text style={styles.info}><Text style={{fontWeight:"bold"}}>Thông Tin Cá Nhân</Text> </Text> {/* Đã sử dụng % cho fontSize */}
       <Text style={styles.space}>{'\u00A0'}</Text> {/* Thẻ khoảng trắng */}
       <Text style={styles.info}><Text style={{ fontWeight: 'bold' }}>Ngày sinh:</Text> 20 tháng 02, 2002</Text>
