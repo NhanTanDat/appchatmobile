@@ -22,7 +22,7 @@ const ProfileScreen = () => {
 
 
   const sendTokentoServer = async () => {
-    console.log("1")
+    
     const apiUrl = 'http://localhost:3000/api/users/userInfo';
    
     const requestBody = {

@@ -12,6 +12,7 @@ export default function Login() {
   const[password,setPassword]=useState("")
   const[error,setError]=useState("")
   const[token,setToken]=useState("")
+  const[_id,setID]=useState("")
   const[storedUsername,setstoredUsername]=useState("")
   const handlePushChat = () => {
     navigation.navigate('Home');
@@ -39,7 +40,8 @@ const checkUser =async()=>{
 
       await AsyncStorage.setItem('token',token);  
       const storedToken1 = await AsyncStorage.getItem('token');
-      if(storedToken1 !== null && storedToke1 !== 0 && storedToken1 !== ''){
+      if (storedToken1 !== null && storedToken1 !== 0 && storedToken1 !== '') {
+
         handlePushChat() 
       }else{
        
@@ -58,7 +60,7 @@ const checkUser =async()=>{
 
   },[])
   const fetchDataLogin = async () => {
-    console.log("1")
+ 
     const apiUrl = 'http://localhost:3000/api/users/login';
     const headers = {
         'Content-Type': 'application/json; charset=utf-8',
@@ -80,12 +82,9 @@ const checkUser =async()=>{
       console.log(response)
       setToken(response.token)
       console.log('====================================');
-      console.log();
+      console.log(response);
       console.log('====================================');
       setstoredUsername()
-      
-
- 
     }
    
     if (response.error) {
@@ -99,78 +98,43 @@ const checkUser =async()=>{
     checkUser();
   }
   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, backgroundColor: '#f0f0f0', borderRadius: 20 }}>
-//   <TextInput
-//     style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
-//     placeholder="email hoặc số điện thoại"
-//     value={username}
-//     onChangeText={setUsername}
-//   />
-//   <Text>{storedUsername}</Text>
-//   <TextInput
-//     style={{ width: '100%', height: 40, marginBottom: 10, paddingHorizontal: 10, backgroundColor: '#fff', borderRadius: 5, borderColor: '#ccc', borderWidth: 1 }}
-//     placeholder="Mật khẩu"
-//     secureTextEntry={true}
-//     value={password}
-//     onChangeText={setPassword}
-//   />
-//   {error && <Text style={{ marginVertical: 20, color: 'red', textAlign: 'center' }}>{error}</Text>}
-//   <TouchableOpacity
-//     style={{ width: '100%', height: 40, marginBottom: 10, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
-//     onPress={fetchDataLogin}
-//   >
-//     <Text style={{ color: '#fff', fontSize: 16 }}>Login</Text>
-//   </TouchableOpacity>
-//   <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
-//     <TouchableOpacity
-//       style={{ width: '48%', height: 40, borderRadius: 5, backgroundColor: '#007AFF', justifyContent: 'center', alignItems: 'center' }}
-//       onPress={handlePushRegister}
-//     >
-//       <Text style={{ color: '#fff', fontSize: 16 }}>Register</Text>
-//     </TouchableOpacity>
-   
-//   </View>
-// </View>
-<View style={styles.container}>
-<Icon name="comments" size={60} color="#007AFF" style={styles.icon} /> {/* Thêm icon xin chào */}
-<Text style={styles.welcomeText}>Welcome to HALLO</Text>
-<View style={styles.inputContainer}>
-  <Icon name="user" size={24} color="#999" style={styles.inputIcon} /> {/* Thêm icon vào ô nhập */}
-  <TextInput
-    style={styles.input}
-    placeholder="Email hoặc số điện thoại"
-    value={username}
-    onChangeText={setUsername}
-  />
-</View>
-<View style={styles.inputContainer}>
-  <Icon name="lock" size={24} color="#999" style={styles.inputIcon} /> {/* Thêm icon vào ô nhập */}
-  <TextInput
-    style={styles.input}
-    placeholder="Mật khẩu"
-    secureTextEntry={true}
-    value={password}
-    onChangeText={setPassword}
-  />
-</View>
-{error ? <Text style={styles.error}>{error}</Text> : null}
-<TouchableOpacity
-  style={styles.loginButton}
-  onPress={fetchDataLogin}
->
-  <Text style={styles.loginButtonText}>Login</Text>
-</TouchableOpacity>
-<View style={styles.registerContainer}>
-  <Text style={styles.registerText}>Chưa có tài khoản?</Text>
-  <TouchableOpacity onPress={handlePushRegister}>
-    <Text style={[styles.registerText, { color: '#007AFF', marginLeft: 5 }]}>Đăng ký</Text>
-  </TouchableOpacity>
-</View>
-</View>
-
-
-    
-  );
+        <View style={styles.container}>
+          <Icon name="comments" size={60} color="#007AFF" style={styles.icon}/> 
+          <Text style={styles.welcomeText}>Welcome to HALLO</Text>
+              <View style={styles.inputContainer}>
+                <Icon name="user" size={24} color="#999" style={styles.inputIcon}/> 
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email hoặc số điện thoại"
+                  value={username}
+                  onChangeText={setUsername}
+                />
+              </View>
+          <View style={styles.inputContainer}>
+            <Icon name="lock" size={24} color="#999" style={styles.inputIcon}/> 
+            <TextInput
+              style={styles.input}
+              placeholder="Mật khẩu"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={fetchDataLogin}
+          >
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>Chưa có tài khoản?</Text>
+            <TouchableOpacity onPress={handlePushRegister}>
+              <Text style={[styles.registerText, { color: '#007AFF', marginLeft: 5 }]}>Đăng ký</Text>
+            </TouchableOpacity>
+          </View>
+        </View> 
+      );
 };
 
 const styles = StyleSheet.create({
@@ -184,10 +148,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   welcomeText: {
-    fontSize: 32, // Increase font size
+    fontSize: 32, 
     marginBottom: 20,
     fontWeight: 'bold',
-    color: '#333', // Change text color
+    color: '#333', 
   },
   inputContainer: {
     flexDirection: 'row',
@@ -195,7 +159,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 20,
-    width: '80%', // Reduce width to 80% for better layout
+    width: '80%', 
     paddingHorizontal: 10,
   },
   inputIcon: {
@@ -232,14 +196,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 14,
-  },
-  // input: {
-  //   width: '100%',
-  //   height: 40,
-  //   borderColor: 'gray',
-  //   borderWidth: 1,
-  //   marginBottom: 20,
-  //   paddingHorizontal: 10,
-  // },
+  }
+ 
 });
 

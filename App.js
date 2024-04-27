@@ -10,8 +10,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './modules/Auth/Login';
 import Register from './modules/Auth/Register';
 import Home from './modules/Home/Home';
-import Chat from './modules/Chat/Message';
-import Message from './modules/Chat/Message';
+
+import Message from './modules/Chat/Chat';
+import ChatBox from './modules/Chat/Chatbox';
 
 
 const Stack = createStackNavigator();
@@ -29,6 +30,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Message" component={Message} />
+        <Stack.Screen name="ChatBox" component={ChatBox} />
           
       </Stack.Navigator>
     </NavigationContainer>

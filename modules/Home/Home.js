@@ -119,7 +119,7 @@ import * as React from 'react';
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import Message from '../Chat/Message';
+import Message from '../Chat/Chat';
 import ProfileScreen from './ProfileScreen';
 import AddfriendModal from './AddfriendModal';
 
