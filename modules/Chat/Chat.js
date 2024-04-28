@@ -140,13 +140,15 @@ const outputaccepted = ({ item }) =>  (
     <TouchableOpacity
       onPress={() => navigation.navigate('ChatBox')}
     >
-      <View >
+      <View  style={styles.friendContainer} >
       <Image
         source={{ uri: item.avatar }}
-        style={{ width: 50, height: 50 }} // Điều chỉnh kích thước ảnh theo ý muốn
+        style={styles.avatar} 
       />
-        <Text>TÊN của bạn bè: {item.name}</Text>
-      
+      <View style={styles.friendInfo}>
+          <Text style={styles.friendName}>{item.name}</Text>
+          
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -176,6 +178,7 @@ const outputaccepted = ({ item }) =>  (
         data={friend}
         renderItem={outputaccepted}
         keyExtractor={item => item._id}
+        contentContainerStyle={styles.friendsList}
       />
 
      
@@ -189,6 +192,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  
   chatContainer: {
     flexDirection: 'row',
     flex: 1,
@@ -211,6 +215,24 @@ const styles = StyleSheet.create({
   },
   userCardContainer: {
     marginVertical: 8,
+  },  friendsList: {
+    flexGrow: 1,
+  }, friendContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    backgroundColor:"#DDA0DD",
+    borderRadius:10
+  },  friendInfo: {
+    marginLeft: 15,
+  }, friendName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  }, avatar: {
+    marginLeft:20,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
 });
 
