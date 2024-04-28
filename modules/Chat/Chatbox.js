@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'; // Import FontAwesome here
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getRequest, postRequest } from '../service';
@@ -68,6 +68,7 @@ handleFindChat();
           console.error('Error fetching chat:', response.message);
         } else {
           console.log(response);
+          setMessages()
           // Xóa hết dữ liệu trên TextInput
     setInputMessage('');
         }
@@ -80,10 +81,28 @@ handleFindChat();
   
 
 
+    const getMessage = async () => {
+      try {
+       
+        
+        const url = `http://localhost:3000/api/messages/${chatId}`; 
+        const response = await getRequest(url);
+  
+        if (response.error) {
+          console.error('Error fetching chat:', response.message);
+        } else {
+          setMessages(response);
+          
+        }
+      } catch (error) {
+        console.error('Error fetching chat:', error);
+      }
+    };
 
 
-
-
+    useEffect(() => {
+      getMessage(); // Gọi hàm getMessage khi chatId thay đổi
+    }, [inputMessage]);
 
 
 
@@ -111,18 +130,12 @@ handleFindChat();
     <FontAwesome name="ellipsis-v" size={24} color="black" />
   </TouchableOpacity>
 </View>
+
+
+
+
       <View style={styles.chatContainer}>
-
-
-
-
-
-
-
-
-
-
-
+        <ScrollView>
         <FlatList
           data={messages}
           renderItem={({ item }) => (
@@ -135,20 +148,13 @@ handleFindChat();
               <Text style={styles.messageText}>{item.text}</Text>
             </View>
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item._id.toString()}
           contentContainerStyle={styles.messagesContainer}
-          inverted
+          
         />
+        </ScrollView>
         
-
-
-
-
-
-
-
-
-
+      
       </View>
       <View style={styles.inputContainer}>
   <TouchableOpacity style={{ width: '15%', alignItems: 'center' }}>
@@ -200,7 +206,7 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     padding: 10,
     borderRadius: 8,
-    marginVertical: 5,
+    marginVertical: 5
   },
   messageText: {
     fontSize: 16,
@@ -212,9 +218,14 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
     borderTopWidth: 1,
     borderColor: '#ccc',
     paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
   input: {
     flex: 1,
