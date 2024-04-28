@@ -138,7 +138,8 @@ const renderItem = ({ item }) => {
 
 const outputaccepted = ({ item }) =>  (
     <TouchableOpacity
-      onPress={() => navigation.navigate('ChatBox')}
+    onPress={() => navigation.navigate('ChatBox', { item: item })}
+
     >
       <View  style={styles.friendContainer} >
       <Image

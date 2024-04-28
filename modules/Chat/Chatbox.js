@@ -59,13 +59,6 @@ const ChatBox = ({ route }) => {
           contentContainerStyle={styles.messagesContainer}
           inverted
         />
-
-
-
-
-
-
-
         
       </View>
       <View style={styles.inputContainer}>
