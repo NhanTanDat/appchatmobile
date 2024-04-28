@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'; // Import FontAwesome here
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getRequest, postRequest } from '../service';
@@ -48,6 +48,11 @@ handleFindChat();
    
     
     const sendMessage = async () => {
+      if (inputMessage.trim() === '') {
+        // Nếu TextInput rỗng, hiển thị thông báo cho người dùng
+        Alert.alert('Error', 'Không thể gửi tin nhắn rỗng');
+        return;
+      }
       try {
         
         const firstId = await AsyncStorage.getItem('_id');
@@ -63,13 +68,14 @@ handleFindChat();
           console.error('Error fetching chat:', response.message);
         } else {
           console.log(response);
+          // Xóa hết dữ liệu trên TextInput
+    setInputMessage('');
         }
       } catch (error) {
         console.error('Error fetching chat:', error);
       }
 
-      // Xóa hết dữ liệu trên TextInput
-    setInputMessage('');
+      
     };
   
 
