@@ -1,6 +1,6 @@
 
 import React, { useState,useEffect } from 'react';
-import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView, Image } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getRequest, postRequest } from '../service';
@@ -20,7 +20,10 @@ const Message = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [chats, setChats] = useState();
-
+  const [OtherMemberId, setOtherMemberId] = useState();
+const [otherMemberIds, setOtherMemberIds] = useState([]);
+const [friend, setFriend] = useState([]);
+const [friendDataLoaded, setFriendDataLoaded] = useState(false);
  
   const nextsendTokentoServer = async () => {
     console.log(1)
@@ -80,19 +83,10 @@ console.log(userData)
 
 
   const userChats  = async () => {
-   // const apiUrl = `http://localhost:3000/api/chats/${id}`;
-//    const requestBody = JSON.stringify({ name, email: username, password, phone });
+ 
 const id = await AsyncStorage.getItem('_id');
     try {
-        // const response = await getRequest(apiUrl);
-
-        // if (!response.error) {
-        //   console.log('====================================');
-        //   console.log(1);
-        //   console.log('====================================');
-        // } else {
-        //     setError(response.message);
-        // }
+       
         console.log(id);
         const response = await getRequest(`http://localhost:3000/api/chats/${id}`);
                 
@@ -109,17 +103,53 @@ const id = await AsyncStorage.getItem('_id');
         setError('An error occurred while registering. Please try again later.');
     }
 }
-const renderItem = ({ item }) => (
+
+
+const renderFriend = async (otherMemberId) => {
+  if (!friendDataLoaded) {
+    const apiUrl = 'http://localhost:3000/api/users/finduserbyid';
+    const requestBody = { receiverId: otherMemberId };
+    try {
+      const response = await postRequest(apiUrl, JSON.stringify(requestBody));
+      if (!response.error) {
+       console.log('====================================');
+       console.log(response);
+       console.log('====================================');
+       setFriend(prevFriend => prevFriend.concat(response));
+
+        // Lưu thông tin của bạn bè vào state
+      } else {
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+    setFriendDataLoaded(true);
+  }
+};
+
+const renderItem = ({ item }) => {
+  const myId = userid; // ID của bạn
+  const otherMemberId = item.members.find(memberId => memberId !== myId);
+  renderFriend(otherMemberId);
+
   
-  <TouchableOpacity
-      onPress={() => navigation.navigate('ChatBox')} // Chuyển đến chatbox khi nhấn vào mỗi tin nhắn
+};
+
+const outputaccepted = ({ item }) =>  (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ChatBox')}
     >
-      <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-        <Text>ID: {item._id}</Text>
-        <Text>Content: {item.members}</Text>
+      <View >
+      <Image
+        source={{ uri: item.avatar }}
+        style={{ width: 50, height: 50 }} // Điều chỉnh kích thước ảnh theo ý muốn
+      />
+        <Text>TÊN của bạn bè: {item.name}</Text>
+      
       </View>
     </TouchableOpacity>
-);
+  );
 
 
   return (
@@ -141,6 +171,13 @@ const renderItem = ({ item }) => (
       renderItem={renderItem}
       keyExtractor={(item) => item._id} // Đảm bảo key là duy nhất
     />
+
+<FlatList
+        data={friend}
+        renderItem={outputaccepted}
+        keyExtractor={item => item._id}
+      />
+
      
      
     </View>
