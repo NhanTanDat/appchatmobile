@@ -159,7 +159,7 @@ const outputaccepted = ({ item }) =>  (
       <View>
 
       <Text style={{fontWeight:"bold", fontSize:30}}>Xin Chào: {userName}</Text>
-      <Text style={{fontWeight:"bold", fontSize:30}}>ID:{userid}</Text>
+      {/* <Text style={{fontWeight:"bold", fontSize:30}}>ID:{userid}</Text> */}
       
      
       <View>
