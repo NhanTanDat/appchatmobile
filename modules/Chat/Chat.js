@@ -20,6 +20,7 @@ const Message = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [chats, setChats] = useState();
+  const [chatID, setChatID] = useState();
   const [OtherMemberId, setOtherMemberId] = useState();
 const [otherMemberIds, setOtherMemberIds] = useState([]);
 const [friend, setFriend] = useState([]);
@@ -129,14 +130,18 @@ const renderFriend = async (otherMemberId) => {
 };
 
 const renderItem = ({ item }) => {
+
   const myId = userid; // ID của bạn
   const otherMemberId = item.members.find(memberId => memberId !== myId);
+ 
   renderFriend(otherMemberId);
 
   
 };
 
 const outputaccepted = ({ item }) =>  (
+
+
     <TouchableOpacity
     onPress={() => navigation.navigate('ChatBox', { item: item })}
 

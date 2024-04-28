@@ -2,19 +2,93 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'; // Import FontAwesome here
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getRequest, postRequest } from '../service';
 
 const ChatBox = ({ route }) => {
   const windowWidth = Dimensions.get('window').width;
+
   const { item } = route.params;
-  const [username, setUsername] = useState('');
+  //const [firstId, setFirstId] = useState('');
+  const [secondId, setSecondId] = useState('');
+  const [chat, setChat] = useState('');
+  const [chatId, setChatId] = useState('');
   const [messages, setMessages] = useState([]);
+
   const [inputMessage, setInputMessage] = useState('');
 
+
   
+  useEffect(() => {
+
+handleFindChat();
+
+  }, [item]);
+
+
+
+
+    const handleFindChat = async () => {
+      try {
+        setSecondId(item._id)
+        const firstId = await AsyncStorage.getItem('_id');
+        
+        const url = `http://localhost:3000/api/chats/find/${firstId}/${item._id}`; 
+        const response = await getRequest(url);
+  
+        if (response.error) {
+          console.error('Error fetching chat:', response.message);
+        } else {
+          setChat(response);
+          setChatId(response._id)
+        }
+      } catch (error) {
+        console.error('Error fetching chat:', error);
+      }
+    };
+   
+    
+    const sendMessage = async () => {
+      try {
+        
+        const firstId = await AsyncStorage.getItem('_id');
+        const requestBody = {
+          chatId:chatId,
+          senderId:firstId,
+          text:inputMessage
+        };
+        const url = `http://localhost:3000/api/messages/`; 
+        const response = await postRequest(url,  JSON.stringify(requestBody));
+  
+        if (response.error) {
+          console.error('Error fetching chat:', response.message);
+        } else {
+          console.log(response);
+        }
+      } catch (error) {
+        console.error('Error fetching chat:', error);
+      }
+
+      // Xóa hết dữ liệu trên TextInput
+    setInputMessage('');
+    };
+  
+
+
+
+
+
+
+
+
+
+
+
   return (
     <View style={styles.container}>
      <View style={styles.headerContainer}>
-  <Image
+      {/* <Text>{secondId}</Text>
+      <Text> {chatId}</Text> */}
+     <Image
     source={{ uri: item.avatar }}
     style={{
       marginLeft: windowWidth * 0.05, // Chiều rộng của ảnh là 10% của chiều rộng màn hình
@@ -60,6 +134,15 @@ const ChatBox = ({ route }) => {
           inverted
         />
         
+
+
+
+
+
+
+
+
+
       </View>
       <View style={styles.inputContainer}>
   <TouchableOpacity style={{ width: '15%', alignItems: 'center' }}>
@@ -80,7 +163,7 @@ const ChatBox = ({ route }) => {
   />
   <TouchableOpacity style={{ width: '15%', alignItems: 'center',marginLeft:"5%" }}>
     <View style={styles.sendButton}>
-      <Text style={styles.sendButtonText}>Send</Text>
+      <Text style={styles.sendButtonText} onPress={sendMessage}>Send</Text>
     </View>
   </TouchableOpacity>
 </View>
