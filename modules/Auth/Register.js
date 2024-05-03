@@ -19,7 +19,8 @@ const Register = () => {
     }
 
     const handleRegister = async () => {
-        const apiUrl = 'http://localhost:3000/api/users/register';
+        
+        const apiUrl = `${baseUrl}/users/register`;
         const requestBody = JSON.stringify({ name, email: username, password, phone });
 
         try {

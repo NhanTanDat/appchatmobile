@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { postRequest } from '../service';
+import { baseUrl, postRequest } from '../service';
 
 const FriendRequest = () => {
 
@@ -18,9 +18,9 @@ const FriendRequest = () => {
     handlesendFriendRequest()
   };
   const handlesendFriendRequest=() => {
-    console.log('====================================1111');
-    console.log(selectedUserId) /*123*/
-    console.log('====================================1111');
+    console.log('====================================');
+    console.log(selectedUserId) 
+    console.log('====================================');
     acceptFriendRequest()
   };
   const acceptFriendRequest = async (senderId) => {
@@ -33,7 +33,7 @@ const FriendRequest = () => {
       requestId: selectedUserId,
     }
     const response = await postRequest(
-      `http://localhost:3000/api/users/acceptfriendrequest`,
+      `${baseUrl}/users/acceptfriendrequest`,
       JSON.stringify(data)
     );
 
@@ -49,10 +49,8 @@ const FriendRequest = () => {
     setRegisterError(null);
 
     try {
-      const id = await AsyncStorage.getItem("_id"); // Use AsyncStorage.getItem instead of localStorage.getItem
-      //const user = userString; // Parse JSON string to object
-     // const senderId = user._id;
-      //const id = senderId.replace(/^"|"$/g, '');
+      const id = await AsyncStorage.getItem("_id"); 
+      
 
       const userId = {
         senderId: id,
@@ -60,7 +58,7 @@ const FriendRequest = () => {
 
 
       const response = await postRequest(
-        `http://localhost:3000/api/users/getsenderinfo`,
+        `${baseUrl}/users/getsenderinfo`,
         JSON.stringify(userId)
       );
 

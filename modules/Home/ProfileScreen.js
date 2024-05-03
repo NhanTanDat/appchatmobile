@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
-import { postRequest } from '../service';
+import { baseUrl, postRequest } from '../service';
 
 const ProfileScreen = () => {
 
@@ -16,14 +16,14 @@ const ProfileScreen = () => {
 
     const[avatar,setAvatar]=useState("")
 
-    const token = localStorage.getItem('token');
+    const token = AsyncStorage.getItem('token');
 
   
 
 
   const sendTokentoServer = async () => {
     
-    const apiUrl = 'http://localhost:3000/api/users/userInfo';
+    const apiUrl = `${baseUrl}/users/userInfo`;
    
     const requestBody = {
        
@@ -86,32 +86,32 @@ const ProfileScreen = () => {
         </View>
         <View style={{ alignItems: "center", justifyContent: "center", width: "100%", height: "75%", backgroundColor: "white", marginTop: "1%" }}>
   <View style={{ width: "100%", flexDirection: "row", marginLeft: "5%" }}>
-    <View style={{ width: "45%" }}> {/* Đã thay đổi margin thành 45% */}
+    <View style={{ width: "45%" }}> 
       <Image
         source={{ uri: avatar }} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
-        style={styles.avatar} // Kiểu của ảnh
+        style={styles.avatar} 
       />
     </View>
-    <View style={{ alignItems: "flex-start", justifyContent: "center", width: "70%" }}> {/* Đã thay đổi margin thành 55% và width thành 55% */}
+    <View style={{ alignItems: "flex-start", justifyContent: "center", width: "70%" }}>
       <Text style={styles.name}>{userData.name}</Text>
     </View>
   </View>
   <View style={{ marginTop: "1%", backgroundColor: "white", alignItems: "flex-start", justifyContent: "center", width: "100%" }}>
 
 
-      <Text style={styles.info}><Text style={{fontWeight:"bold"}}>Thông Tin Cá Nhân</Text> </Text> {/* Đã sử dụng % cho fontSize */}
-      <Text style={styles.space}>{'\u00A0'}</Text> {/* Thẻ khoảng trắng */}
+      <Text style={styles.info}><Text style={{fontWeight:"bold"}}>Thông Tin Cá Nhân</Text> </Text> 
+      <Text style={styles.space}>{'\u00A0'}</Text> 
       <Text style={styles.info}><Text style={{ fontWeight: 'bold' }}>Ngày sinh:</Text> 20 tháng 02, 2002</Text>
-      <Text style={styles.space}>{'\u00A0'}</Text> {/* Thẻ khoảng trắng */}
+      <Text style={styles.space}>{'\u00A0'}</Text> 
       <Text style={styles.info}><Text style={{ fontWeight: 'bold' }}>Email:</Text> {userData.email}</Text>
-      <Text style={styles.space}>{'\u00A0'}</Text> {/* Thẻ khoảng trắng */}
+      <Text style={styles.space}>{'\u00A0'}</Text> 
       <Text style={styles.info}><Text style={{ fontWeight: 'bold' }}>Điện thoại:</Text> +84 {userData.phone}</Text>
    
   </View>
 
   <View style={{marginTop:30}}>
             <TouchableOpacity onPress={handleLogout}>
-                  <Icon name="sign-out" size={30} color="#FF0000" /> {/* Thay đổi tên icon, kích thước và màu sắc tùy ý */}
+                  <Icon name="sign-out" size={30} color="#FF0000" />
                   </TouchableOpacity>
             </View>
 </View>
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
   avatar: {
     width: 150,
     height: 150,
-    borderRadius: 100, // Assuming the avatar is circular
+    borderRadius: 100, 
     marginBottom: 20,
   }, space: {
-    width: 10, // Chiều rộng của khoảng trắng, có thể thay đổi theo nhu cầu
+    width: 10,
   },
 
   name: {

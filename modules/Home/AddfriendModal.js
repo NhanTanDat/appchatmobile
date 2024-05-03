@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Button, View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { getRequest, postRequest } from '../service';
+import { baseUrl, getRequest, postRequest } from '../service';
 import IntroduceUser from './IntroduceUser';
 import FriendRequest from './FriendRequest';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddfriendModal() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const _id = localStorage.getItem('_id');
+  const _id = AsyncStorage.getItem('_id');
   let selectedFriendId = null;
   const [responseMessage, setResponseMessage] = useState('');
 
@@ -18,7 +19,7 @@ function AddfriendModal() {
     const fetchUsers = async () => {
       setIsLoading(true);
       try {
-        const apiUrl = 'http://localhost:3000/api/users/find/user';
+        const apiUrl = `${baseUrl}/users/find/user`;
         const requestBody = { data: searchQuery };
 
         const response = await postRequest(apiUrl, JSON.stringify(requestBody));
@@ -68,7 +69,7 @@ function AddfriendModal() {
 
   const sendFriendRequest = async () => {
     try {
-      const apiUrl = `http://localhost:3000/api/users/sendfriendrequest`;
+      const apiUrl = `${baseUrl}/users/sendfriendrequest`;
       const requestBody = {
         senderId: _id,
         receiverId: selectedFriendId
@@ -92,33 +93,7 @@ function AddfriendModal() {
   };
 
    return (
-  //   <ScrollView style={{ width: "100%", height: "100%" }}>
-  //     <View style={styles.container}>
-  //       <View style={styles.searchContainer}>
-  //         <TextInput
-  //           placeholder="Enter phone, name, or email"
-  //           value={searchQuery}
-  //           onChangeText={handleSearch}
-  //           style={styles.input}
-  //         />
-  //         {searchQuery !== '' && !isLoading ? (
-  //           <FlatList
-  //             data={searchResults}
-  //             keyExtractor={(item, index) => index.toString()}
-  //             renderItem={renderItem}
-  //             style={styles.list}
-  //           />
-  //         ) : null}
-  //         {isLoading ? <ActivityIndicator size="small" /> : null}
-  //       </View>
-  //       <Text>{responseMessage}</Text>
-  //       <View style={{ width: '100%', height: '100%', flex: 1 }}>
-  //         <FriendRequest></FriendRequest>
-  //         <IntroduceUser></IntroduceUser>
-  //       </View>
-       
-  //     </View>
-  //   </ScrollView>
+
   <ScrollView style={{ width: "100%", height: "100%" }}>
   <View style={styles.container}>
     <View style={styles.searchContainer}>
