@@ -47,7 +47,7 @@ const ProfileScreen = () => {
       console.log(response)
       console.log(background)
 
-     
+      
       
 
  
@@ -89,17 +89,17 @@ const ProfileScreen = () => {
     <View style={{ width: "45%" }}> 
       <Image
         source={{ uri: avatar }} // Đường dẫn đến ảnh hoặc đối tượng hình ảnh
-        style={styles.avatar} 
+        style={styles.avatar} // Kiểu của ảnh
       />
     </View>
-    <View style={{ alignItems: "flex-start", justifyContent: "center", width: "70%" }}>
+    <View style={{ alignItems: "flex-start", justifyContent: "center", width: "70%" }}> 
       <Text style={styles.name}>{userData.name}</Text>
     </View>
   </View>
   <View style={{ marginTop: "1%", backgroundColor: "white", alignItems: "flex-start", justifyContent: "center", width: "100%" }}>
 
 
-      <Text style={styles.info}><Text style={{fontWeight:"bold"}}>Thông Tin Cá Nhân</Text> </Text> 
+      <Text style={styles.info}><Text style={{fontWeight:"bold"}}>Thông Tin Cá Nhân</Text> </Text>
       <Text style={styles.space}>{'\u00A0'}</Text> 
       <Text style={styles.info}><Text style={{ fontWeight: 'bold' }}>Ngày sinh:</Text> 20 tháng 02, 2002</Text>
       <Text style={styles.space}>{'\u00A0'}</Text> 
@@ -111,7 +111,7 @@ const ProfileScreen = () => {
 
   <View style={{marginTop:30}}>
             <TouchableOpacity onPress={handleLogout}>
-                  <Icon name="sign-out" size={30} color="#FF0000" />
+                  <Icon name="sign-out" size={30} color="#FF0000" /> 
                   </TouchableOpacity>
             </View>
 </View>
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
   avatar: {
     width: 150,
     height: 150,
-    borderRadius: 100, 
+    borderRadius: 100, // Assuming the avatar is circular
     marginBottom: 20,
   }, space: {
-    width: 10,
+    width: 10, // Chiều rộng của khoảng trắng, có thể thay đổi theo nhu cầu
   },
 
   name: {

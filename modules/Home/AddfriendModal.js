@@ -96,7 +96,7 @@ function AddfriendModal() {
     
    
         
-      const apiUrl = `http://172.20.33.83:3000/api/users/sendfriendrequest`;
+      const apiUrl = `${baseUrl}/users/sendfriendrequest`;
       const requestBody = JSON.stringify({  senderId: userId,   receiverId: selectedFriendId });
 console.log('====================================IDID');
       console.log(selectedFriendId);
@@ -153,13 +153,35 @@ console.log('====================================IDID');
 
    return (
 
-  <ScrollView style={{ width: "100%", height: "100%" }}>
-  <View style={styles.container}>
-    <View style={styles.searchContainer}>
-      <TextInput
-        placeholder="Enter phone, name, or email"
-        value={searchQuery}
-        onChangeText={handleSearch}
+//   <ScrollView style={{ width: "100%", height: "100%" }}>
+//   <View style={styles.container}>
+//     <View style={styles.searchContainer}>
+//       <TextInput
+//         placeholder="Enter phone, name, or email"
+//         value={searchQuery}
+//         onChangeText={handleSearch}
+//         style={styles.input}
+//       />
+      // {searchQuery !== '' && !isLoading ? (
+      //   <FlatList
+      //     data={searchResults}
+      //     keyExtractor={(item, index) => index.toString()}
+      //     renderItem={renderItem}
+      //     style={styles.list}
+      //   />
+      // ) : null}
+      // {isLoading ? <ActivityIndicator size="small" /> : null}
+//     </View>
+//     <Text>{responseMessage}</Text>
+//     
+//   </View>
+// </ScrollView>
+<View style={styles.container}>
+<View style={styles.searchContainer}>
+       <TextInput
+      placeholder="Nhập số điện thoại, tên, email để tìm kiếm"
+         value={searchQuery}
+         onChangeText={handleSearch}
         style={styles.input}
       />
       {searchQuery !== '' && !isLoading ? (
@@ -171,14 +193,15 @@ console.log('====================================IDID');
         />
       ) : null}
       {isLoading ? <ActivityIndicator size="small" /> : null}
-    </View>
-    <Text>{responseMessage}</Text>
-    <View style={{ width: '100%', height: '100%', flex: 1 }}>
+      <Text>{responseMessage}</Text>
+       
+     </View>
+     <View style={{ width: '100%', height: '100%', flex: 1 }}>
       <FriendRequest></FriendRequest>
-      <IntroduceUser></IntroduceUser>
-    </View>
-  </View>
-</ScrollView>
+       <IntroduceUser></IntroduceUser>
+     </View>
+
+</View>
   );
 }
 
@@ -186,22 +209,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'blue',
+    justifyContent: 'flex-start',
+    backgroundColor: 'rgb(0, 204, 255)',
     width: '100%',
     height:"100%"
   },
   searchContainer: {
     flexDirection: 'column',
-    backgroundColor: '#E0FFFF',
-    width: "100%"
+    backgroundColor: 'rgb(0, 204, 255)',
+    width: "100%",
+    height:"30%"
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
-    marginBottom: 10,
-    flex: 1,
+    marginBottom: 10,height:50,
+    backgroundColor:"white"
+    
   },
   list: {
     flex: 1,

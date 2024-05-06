@@ -36,6 +36,7 @@ const FriendRequest = () => {
       `${baseUrl}/users/acceptfriendrequest`,
       JSON.stringify(data)
     );
+    
 
     setIsRegisterLoading(false);
 
@@ -49,7 +50,7 @@ const FriendRequest = () => {
     setRegisterError(null);
 
     try {
-      const id = await AsyncStorage.getItem("_id"); 
+      const id = await AsyncStorage.getItem("_id"); //
       
 
       const userId = {
@@ -103,7 +104,7 @@ useEffect(() => {
           {/* Hiển thị các thuộc tính khác của person nếu cần */}
         </View>
     </TouchableOpacity >
-    <TouchableOpacity onPress={() => handleSelectAccept(item.id)}>
+    <TouchableOpacity style={{marginLeft:"10%"}} onPress={() => handleSelectAccept(item.id)}>
       <Text>Chấp nhận</Text>
     </TouchableOpacity>
     </View>

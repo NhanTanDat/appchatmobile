@@ -169,7 +169,7 @@ const outputaccepted = ({ item }) =>  (
       
      
       <View>
-        <Text style={{fontWeight:"bold", fontSize:24, fontFamily:"Roboto"}} >Các đoạn chat của bạn</Text>
+        <Text style={{fontWeight:"bold", fontSize:24, fontFamily:'Arial'}} >Các đoạn chat của bạn</Text>
       </View>
       </View>
 
