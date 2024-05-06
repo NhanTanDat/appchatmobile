@@ -8,15 +8,32 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddfriendModal() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [ID, setID] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [userId, setUserId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
   const _id = AsyncStorage.getItem('_id');
   let selectedFriendId = null;
   const [responseMessage, setResponseMessage] = useState('');
 
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const id = await AsyncStorage.getItem('_id');
+        setUserId(id);
+      } catch (error) {
+        console.error('Error getting user ID:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     const fetchUsers = async () => {
+      setResponseMessage("");
       setIsLoading(true);
       try {
         const apiUrl = `${baseUrl}/users/find/user`;
@@ -43,11 +60,19 @@ function AddfriendModal() {
   };
 
   const handleSelectFriend = (friendId) => {
+     setResponseMessage("Gửi yêu cầu kết bạn thành công")
+    console.log(0)
+    console.log(friendId)
+    
     selectedFriendId = friendId;
+    console.log('====================================');
+    console.log(friendId);
+    console.log('====================================');
     handlesendFriendRequest();
   };
 
   const handlesendFriendRequest = () => {
+    setID(_id);
     sendFriendRequest();
   };
 
@@ -68,28 +93,62 @@ function AddfriendModal() {
   );
 
   const sendFriendRequest = async () => {
-    try {
-      const apiUrl = `${baseUrl}/users/sendfriendrequest`;
-      const requestBody = {
-        senderId: _id,
-        receiverId: selectedFriendId
-      };
-      const response = await postRequest(apiUrl, JSON.stringify(requestBody));
+    
+   
+        
+      const apiUrl = `http://172.20.33.83:3000/api/users/sendfriendrequest`;
+      const requestBody = JSON.stringify({  senderId: userId,   receiverId: selectedFriendId });
+console.log('====================================IDID');
+      console.log(selectedFriendId);
+      console.log('====================================');
 
-      if (response.error) {
-        console.error('Error sending friend request:', response.message);
-        setResponseMessage(response.message);
-        throw new Error('Failed to send friend request');
+
+
+      console.log('====================================id');
+      console.log(_id);
+      console.log('====================================');
+      try {
+          const response = await postRequest(apiUrl, requestBody);
+
+          if (!response.error) {
+                console.log(response);
+               
+          } else {
+           setResponseMessage(response.message);
+          }
+      } catch (error) {
+          console.error('There was a problem with the registration:', error);
+          setError('An error occurred while registering. Please try again later.');
       }
+  
+    
+      // console.log('====================================IDID');
+      // console.log(selectedFriendId);
+      // console.log('====================================');
 
-      if (!response.error) {
-        console.log(response);
-      }
 
-    } catch (error) {
-      console.error('Error sending friend request:', error.message);
-      throw error;
-    }
+
+      // console.log('====================================id');
+      // console.log(_id);
+      // console.log('====================================');
+      // const apiUrl = `${baseUrl}/users/sendfriendrequest`;
+      // const requestBody = {
+      //   senderId: _id,
+      //   receiverId: selectedFriendId
+      // };
+      // const response = await postRequest(apiUrl, JSON.stringify(requestBody));
+
+      // if (response.error) {
+      //   console.error('Error sending friend request:', response.message);
+      //   setResponseMessage(response.message);
+      //   throw new Error('Failed to send friend request');
+      // }
+
+      // if (!response.error) {
+      //   console.log(response);
+      // }
+
+    
   };
 
    return (
