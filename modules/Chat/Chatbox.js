@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl, getRequest, postRequest } from '../service';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+import { io } from "socket.io-client";
 const ChatBox = ({ route }) => {
   
   
@@ -16,11 +18,91 @@ const ChatBox = ({ route }) => {
   const [chatId, setChatId] = useState('');
   const [messages, setMessages] = useState([]);
   const flatListRef = useRef(null);
-
+  const [currentChat, setCurrentChat] = useState(null);
+  const [socket, setSocket] = useState(null);
   const [inputMessage, setInputMessage] = useState('');
+  const [newMessage, setNewMessage] = useState(null);
+
+  const [onlineUsers, setOnlineUsers] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io("http://192.168.10.43:80"); // Thay đổi URL server tương ứng
+    setSocket(newSocket);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [item]);
+
+
+
+
+  useEffect(() => {
+    if (socket === null) return;
+    socket.emit("addNewUser", item?._id);
+    socket.on("getUsers", (res) => {
+      setOnlineUsers(res);
+    });
+    return () => {
+      socket.off("getUsers");
+    };
+  }, [socket]);
+
 
 
   
+  useEffect(() => {
+    if (socket === null) return;
+    const recipientId = currentChat?.members.find((id) => id !== user?._id);
+    socket.emit("sendMessage", { ...newMessage, recipientId });
+  }, [newMessage]);
+
+  useEffect(() => {
+    if (socket === null) return;
+
+    socket.on("getMessage", (res) => {
+      if (currentChat?._id !== res.chatId) return;
+      setMessages((prev) => [...prev, res]);
+    });
+
+    socket.on("getNotification", (res) => {
+      const isChatOpen = currentChat?.members.some((Id) => Id === res.senderId);
+      if (isChatOpen) {
+        setNotifications((prev) => [{ ...res, isRead: true }, ...prev]);
+      } else {
+        setNotifications((prev) => [res, ...prev]);
+      }
+    });
+
+    return () => {
+      socket.off("getMessage");
+      socket.off("getNotification");
+    };
+  }, [socket, currentChat]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
 
 handleFindChat();
@@ -78,6 +160,11 @@ handleFindChat();
         } else {
           console.log(response);
           setMessages()
+
+
+
+
+          socket.emit('sendMessage', { chatId, firstId, text: inputMessage });
           // Xóa hết dữ liệu trên TextInput
           
     setInputMessage('');

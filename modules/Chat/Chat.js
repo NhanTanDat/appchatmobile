@@ -105,11 +105,6 @@ const id = await AsyncStorage.getItem('_id');
     }
 }
 
-const openSocketForFriend = (friendId) => {
-  const socket = io('http://localhost:5173');
-  // Do something with the socket
-  console.log("Socket opened for friend with ID:", friendId);
-};
 const renderFriend = async (otherMemberId) => {
   if (!friendDataLoaded) {
     const apiUrl = `${baseUrl}/users/finduserbyid`;
@@ -147,8 +142,7 @@ const outputaccepted = ({ item }) =>  (
 
 
   <TouchableOpacity onPress={() => {
-    navigation.navigate('ChatBox', { item: item });
-    openSocketForFriend(item._id); // Mở kết nối socket khi nhấn vào một người bạn
+    navigation.navigate('ChatBox', { item: item })
   }}>
       <View  style={styles.friendContainer} >
       <Image
