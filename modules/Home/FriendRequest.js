@@ -11,22 +11,38 @@ const FriendRequest = () => {
   const [selectedUserId, setSelectedUserId] = useState("");
 
   const handleSelectAccept = (user) => {
+   
+   console.log('================console.log(user)====================');
    console.log(user)
+   console.log('====================================');
     setSelectedUserId(user);
     
     
-    handlesendFriendRequest()
+  
   };
+
+
+
+  useEffect(() => {
+    if (selectedUserId !== "") {
+      handlesendFriendRequest();
+    }
+  }, [selectedUserId]);
+
+
   const handlesendFriendRequest=() => {
-    console.log('====================================');
+    console.log('===============selectedUserId=====================');
     console.log(selectedUserId) 
     console.log('====================================');
-    acceptFriendRequest()
+    acceptFriendRequest(selectedUserId)
   };
   const acceptFriendRequest = async (senderId) => {
 
     setIsRegisterLoading(true);
     setRegisterError(null);
+    console.log('====================================');
+    console.log(selectedUserId);
+    console.log('====================================');
 
 
     const data = {
@@ -36,7 +52,7 @@ const FriendRequest = () => {
       `${baseUrl}/users/acceptfriendrequest`,
       JSON.stringify(data)
     );
-    
+setE
 
     setIsRegisterLoading(false);
 
