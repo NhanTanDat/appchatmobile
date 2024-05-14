@@ -46,27 +46,7 @@ const getUserInfo = async (req, res) => {
   }
 };
 
-////LỢI CODE THÊM
-const updateAvatar = async (req, res) => {
-  const { userId, avatarUrl } = req.body;
 
-  try {
-    // Kiểm tra xem userId có tồn tại trong database không
-    const user = await userModel.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "Người dùng không tồn tại" });
-    }
-
-    // Cập nhật avatarUrl cho người dùng
-    user.avatar = avatarUrl;
-    await user.save();
-
-    res.status(200).json({ status: 200, message: "Cập nhật avatar thành công" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Đã xảy ra lỗi khi cập nhật avatar" });
-  }
-};
 
 
 const registerUser = async (req, res) => {
@@ -168,7 +148,7 @@ const getUsers = async (req, res) => {
     // Lấy danh sách bạn bè của người dùng
     const user = await userModel.findById(id);
 
-    const friendIds = user.friends.map(friend => friend.id);
+    const friendIds = user.friends.map(friend => friend._id);
 
     // Lấy danh sách người đã gửi yêu cầu kết bạn cho người dùng
     const requestSenderIds = user.friendRequest.map(request => request.receiverId);
@@ -331,4 +311,4 @@ const getSenderInfoByReceiverIdHandler = async (req, res) => {
   }
 };
 
-module.exports = { updateAvatar,finUserByID,getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};
+module.exports = { finUserByID,getSenderInfoByReceiverIdHandler,getFriendRequestsById,registerUser, loginUser, findUser, getUsers, sendFriendRequest,acceptFriendRequest ,getUserInfo,authenticateToken};

@@ -10,8 +10,7 @@ const {
   authenticateToken,
   getFriendRequestsById,
   getSenderInfoByReceiverIdHandler,
-  finUserByID,
-  updateAvatar
+  finUserByID
 } = require("../Controllers/userController");
 
 const router = express.Router();
@@ -27,6 +26,6 @@ router.post("/", getUsers);
 router.post("/getsenderinfo", getSenderInfoByReceiverIdHandler);
 router.post("/finduserbyid", finUserByID);
 
-router.post("/updateAvatar",updateAvatar);
+
 
 module.exports = router;

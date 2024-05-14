@@ -12,7 +12,7 @@ function AddfriendModal() {
   const [searchResults, setSearchResults] = useState([]);
   const [userId, setUserId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [items, setItems] = useState([]);
   const _id = AsyncStorage.getItem('_id');
   let selectedFriendId = null;
   const [responseMessage, setResponseMessage] = useState('');
@@ -32,12 +32,32 @@ function AddfriendModal() {
   }, []);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    // const fetchUsers = async () => {
+    //   setResponseMessage("");
+    //   setIsLoading(true);
+    //   try {
+    //     const apiUrl = `${baseUrl}/users/find/user`;
+    //     const requestBody = { data: searchQuery };
+
+    //     const response = await postRequest(apiUrl, JSON.stringify(requestBody));
+
+    //     if (!response.error) {
+    //       setSearchResults(response);
+    //     } else {
+    //       console.error('Error fetching users:', response.message);
+    //     }
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // };
+
+    // fetchUsers();
+    const Render = async () => {
       setResponseMessage("");
       setIsLoading(true);
       try {
-        const apiUrl = `${baseUrl}/users/find/user`;
-        const requestBody = { data: searchQuery };
+        const apiUrl = `${baseUrl}/users/`;
+        const requestBody = { id: userId };
 
         const response = await postRequest(apiUrl, JSON.stringify(requestBody));
 
@@ -51,12 +71,20 @@ function AddfriendModal() {
       }
     };
 
-    fetchUsers();
+    Render();
   }, [searchQuery]);
 
-
+  const filteredItems = searchResults.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.phone.includes(searchQuery)
+  );
   const handleSearch = (text) => {
     setSearchQuery(text);
+    console.log('====================================');
+   
+    console.log(searchResults);
+    console.log('====================================');
   };
 
   const handleSelectFriend = (friendId) => {
@@ -186,7 +214,7 @@ console.log('====================================IDID');
       />
       {searchQuery !== '' && !isLoading ? (
         <FlatList
-          data={searchResults}
+          data={filteredItems}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           style={styles.list}

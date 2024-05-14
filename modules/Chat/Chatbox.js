@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, TextInput, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'; // Import FontAwesome here
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getRequest, postRequest } from '../service';
-
+import { baseUrl, getRequest, postRequest } from '../service';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const ChatBox = ({ route }) => {
-  const windowWidth = Dimensions.get('window').width;
+  
+  
 
   const { item } = route.params;
   //const [firstId, setFirstId] = useState('');
@@ -13,6 +15,7 @@ const ChatBox = ({ route }) => {
   const [chat, setChat] = useState('');
   const [chatId, setChatId] = useState('');
   const [messages, setMessages] = useState([]);
+  const flatListRef = useRef(null);
 
   const [inputMessage, setInputMessage] = useState('');
 
@@ -32,7 +35,7 @@ handleFindChat();
         setSecondId(item._id)
         const firstId = await AsyncStorage.getItem('_id');
         
-        const url = `http://localhost:3000/api/chats/find/${firstId}/${item._id}`; 
+        const url = `${baseUrl}/chats/find/${firstId}/${item._id}`; 
         const response = await getRequest(url);
   
         if (response.error) {
@@ -53,6 +56,12 @@ handleFindChat();
         Alert.alert('Error', 'Không thể gửi tin nhắn rỗng');
         return;
       }
+      else{
+        if (flatListRef.current) {
+          const newPosition = 0; // Vị trí mong muốn
+          flatListRef.current.scrollToOffset({ offset: newPosition, animated: true });
+        }
+      }
       try {
         
         const firstId = await AsyncStorage.getItem('_id');
@@ -61,7 +70,7 @@ handleFindChat();
           senderId:firstId,
           text:inputMessage
         };
-        const url = `http://localhost:3000/api/messages/`; 
+        const url = `${baseUrl}/messages/`; 
         const response = await postRequest(url,  JSON.stringify(requestBody));
   
         if (response.error) {
@@ -70,6 +79,7 @@ handleFindChat();
           console.log(response);
           setMessages()
           // Xóa hết dữ liệu trên TextInput
+          
     setInputMessage('');
         }
       } catch (error) {
@@ -85,7 +95,7 @@ handleFindChat();
       try {
        
         
-        const url = `http://localhost:3000/api/messages/${chatId}`; 
+        const url = `${baseUrl}/messages/${chatId}`; 
         const response = await getRequest(url);
   
         if (response.error) {
@@ -103,6 +113,9 @@ handleFindChat();
     useEffect(() => {
       getMessage(); // Gọi hàm getMessage khi chatId thay đổi
     }, [inputMessage]);
+    useEffect(() => {
+      getMessage(); // Gọi hàm getMessage khi chatId thay đổi
+    }, [chatId]);
 
 
 
@@ -111,22 +124,21 @@ handleFindChat();
   return (
     <View style={styles.container}>
      <View style={styles.headerContainer}>
-      {/* <Text>{secondId}</Text>
-      <Text> {chatId}</Text> */}
+      
      <Image
     source={{ uri: item.avatar }}
     style={{
-      marginLeft: windowWidth * 0.05, // Chiều rộng của ảnh là 10% của chiều rộng màn hình
-      width: windowWidth * 0.1, // Chiều rộng của ảnh là 20% của chiều rộng màn hình
-      height: windowWidth * 0.1, // Chiều cao của ảnh cũng là 20% của chiều rộng màn hình để tạo thành hình tròn
+      
+      width: windowWidth * 0.15, // Chiều rộng của ảnh là 20% của chiều rộng màn hình
+      height: windowWidth * 0.15, // Chiều cao của ảnh cũng là 20% của chiều rộng màn hình để tạo thành hình tròn
       borderRadius: (windowWidth * 0.2) / 2, // Bán kính là nửa chiều rộng của ảnh
     }} 
   />
-  <Text style={[styles.header, { width: windowWidth * 0.6, marginLeft:windowWidth*0.1 }]}>{item.name}</Text> {/* Chiều rộng của văn bản là 60% của chiều rộng màn hình */}
-  <TouchableOpacity style={{ width: windowWidth * 0.1, alignItems: 'center' }}> {/* Chiều rộng của nút là 10% của chiều rộng màn hình */}
+  <Text style={[styles.header, { width: windowWidth * 0.4,marginLeft:"5%" }]}>{item.name}</Text> 
+  <TouchableOpacity style={{ width: windowWidth * 0.1, alignItems: 'center' }}> 
     <Ionicons name="call" size={24} color="green" />
   </TouchableOpacity>
-  <TouchableOpacity style={{ width: windowWidth * 0.1, alignItems: 'center' }}> {/* Chiều rộng của nút là 10% của chiều rộng màn hình */}
+  <TouchableOpacity style={{ width: windowWidth * 0.2, alignItems: 'center' }}> 
     <FontAwesome name="ellipsis-v" size={24} color="black" />
   </TouchableOpacity>
 </View>
@@ -135,24 +147,26 @@ handleFindChat();
 
 
       <View style={styles.chatContainer}>
-        <ScrollView>
+        
         <FlatList
-          data={messages}
-          renderItem={({ item }) => (
-            <View
-              style={[
-                styles.message,
-                { alignSelf: item.sender === 'me' ? 'flex-end' : 'flex-start' },
-              ]}
-            >
-              <Text style={styles.messageText}>{item.text}</Text>
-            </View>
-          )}
-          keyExtractor={(item) => item._id.toString()}
-          contentContainerStyle={styles.messagesContainer}
-          
-        />
-        </ScrollView>
+        ref={flatListRef}
+  data={messages}
+  renderItem={({ item, index }) => (
+    <View
+      style={[
+        styles.message,
+        { alignSelf: item.sender === 'me' ? 'flex-end' : 'flex-start' },
+      ]}
+    >
+      <Text style={styles.messageText}>{item.text}</Text>
+    </View>
+  )}
+  keyExtractor={(item, index) => index.toString()} // Sử dụng index của mỗi mục làm khóa
+  contentContainerStyle={styles.messagesContainer}
+  
+/>
+
+       
         
       
       </View>
@@ -161,7 +175,7 @@ handleFindChat();
     <MaterialIcons name="attach-file" size={24} color="black" />
   </TouchableOpacity>
   <TouchableOpacity style={{ width: '15%', alignItems: 'center' }}>
-    <FontAwesome name="smile-o" size={24} color="black" /> {/* Change to smile-o */}
+    <FontAwesome name="smile-o" size={24} color="black" /> 
   </TouchableOpacity>
  
   <TextInput
@@ -185,22 +199,30 @@ handleFindChat();
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height:windowHeight*0.9,
     backgroundColor: '#fff',
-    padding: 20,
+   padding:5,
+    width:windowWidth*1
   },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+   
+    height:"10%",
+    width: windowWidth *1
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
+    justifyContent:"center",
+    alignItems:"center"
   },
   chatContainer: {
-    flex: 1,
+   
+    width:windowWidth*1,
+    height:windowHeight*0.68,
+    backgroundColor:"red"
   },
   message: {
     maxWidth: '70%',
@@ -213,7 +235,7 @@ const styles = StyleSheet.create({
   },
   messagesContainer: {
     flexGrow: 1,
-    justifyContent: 'flex-end',
+    
   },
   inputContainer: {
     flexDirection: 'row',

@@ -3,7 +3,7 @@ import React, { useState,useEffect } from 'react';
 import { StyleSheet, View, TextInput, Button, FlatList, Text, ScrollView, Image } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getRequest, postRequest } from '../service';
+import { baseUrl, getRequest, postRequest } from '../service';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
@@ -35,7 +35,7 @@ console.log(userData)
     const token = await AsyncStorage.getItem('token');
     
     
-    const apiUrl = 'http://localhost:3000/api/users/userInfo';
+    const apiUrl = `${baseUrl}/users/userInfo`;
    
     const requestBody = {
        
@@ -89,7 +89,7 @@ const id = await AsyncStorage.getItem('_id');
     try {
        
         console.log(id);
-        const response = await getRequest(`http://localhost:3000/api/chats/${id}`);
+        const response = await getRequest(`${baseUrl}/chats/${id}`);
                 
                 if (!response.error) {
                   console.log('====================================');
@@ -108,7 +108,7 @@ const id = await AsyncStorage.getItem('_id');
 
 const renderFriend = async (otherMemberId) => {
   if (!friendDataLoaded) {
-    const apiUrl = 'http://localhost:3000/api/users/finduserbyid';
+    const apiUrl = `${baseUrl}/users/finduserbyid`;
     const requestBody = { receiverId: otherMemberId };
     try {
       const response = await postRequest(apiUrl, JSON.stringify(requestBody));
