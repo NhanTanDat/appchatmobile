@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, TextInput, FlatList, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Text,Modal, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'; // Import FontAwesome here
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl, getRequest, postRequest } from '../service';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
+import EmojiSelector from 'react-native-emoji-selector';
 import { io } from "socket.io-client";
 const ChatBox = ({ route }) => {
   
@@ -24,6 +24,31 @@ const ChatBox = ({ route }) => {
   const [newMessage, setNewMessage] = useState(null);
   const [recipientId, setRecipientId] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState(null);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState(null);
+ 
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setInputMessage(emoji);
+    toggleModal(); // Đóng modal sau khi chọn emoji
+  };
+
+
+
+
+
+
+
+
+
+
+
+  
 
   useEffect(() => {
     const newSocket = io(`http://192.168.0.35:80`); // Thay đổi URL server tương ứng
@@ -263,12 +288,20 @@ handleFindChat();
   <TouchableOpacity style={{ width: windowWidth * 0.1, alignItems: 'center' }}> 
     <Ionicons name="call" size={24} color="green" />
   </TouchableOpacity>
+
+
   <TouchableOpacity style={{ width: windowWidth * 0.2, alignItems: 'center' }}> 
     <FontAwesome name="ellipsis-v" size={24} color="black" />
   </TouchableOpacity>
 </View>
 
-
+<Modal visible={isModalVisible} animationType="slide">
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ScrollView>
+            <EmojiSelector onEmojiSelected={handleEmojiSelect} />
+          </ScrollView>
+        </View>
+      </Modal>
 
 
       <View style={styles.chatContainer}>
@@ -299,9 +332,12 @@ handleFindChat();
   <TouchableOpacity style={{ width: '15%', alignItems: 'center' }}>
     <MaterialIcons name="attach-file" size={24} color="black" />
   </TouchableOpacity>
-  <TouchableOpacity style={{ width: '15%', alignItems: 'center' }}>
+  <TouchableOpacity onPress={toggleModal} style={{ width: '15%', alignItems: 'center' }}>
     <FontAwesome name="smile-o" size={24} color="black" /> 
   </TouchableOpacity>
+
+
+
  
   <TextInput
     style={{ width: '45%', paddingHorizontal: 10, borderRadius:20 }} // Đặt chiều rộng là 50% và padding ngang là 10
