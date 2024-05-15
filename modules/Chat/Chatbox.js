@@ -22,18 +22,27 @@ const ChatBox = ({ route }) => {
   const [socket, setSocket] = useState(null);
   const [inputMessage, setInputMessage] = useState('');
   const [newMessage, setNewMessage] = useState(null);
-
+  const [recipientId, setRecipientId] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://192.168.10.43:80"); // Thay đổi URL server tương ứng
+    const newSocket = io(`http://192.168.0.35:80`); // Thay đổi URL server tương ứng
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();
     };
   }, [item]);
 
+  useEffect(() => {
+    setRecipientId(item._id)
+  
+  }, [item]);
 
+
+
+  useEffect(() => {
+    setCurrentChat(item)
+  }, [item]);
 
 
   useEffect(() => {
@@ -47,12 +56,39 @@ const ChatBox = ({ route }) => {
     };
   }, [socket]);
 
-
+  useEffect(() => {
+    if (socket === null) return;
+  
+    socket.on("getMessage", (res) => {
+      // Kiểm tra nếu currentChat không tồn tại hoặc không có thành viên
+      if (!currentChat || !currentChat.members) return;
+  
+      if (currentChat._id !== res.chatId) return;
+      
+      // Kiểm tra nếu currentChat.members là một mảng có ít nhất một phần tử
+      const isChatOpen = currentChat.members.some((Id) => Id === res.senderId);
+      if (isChatOpen) {
+        setMessages((prev) => [...prev, res]);
+      } else {
+        // Xử lý logic nếu cuộc trò chuyện không được mở
+      }
+    });
+  
+    socket.on("getNotification", (res) => {
+      // Xử lý logic cho sự kiện getNotification tương tự
+    });
+  
+    return () => {
+      socket.off("getMessage");
+      socket.off("getNotification");
+    };
+  }, [socket, currentChat]);
+  
 
   
   useEffect(() => {
     if (socket === null) return;
-    const recipientId = currentChat?.members.find((id) => id !== user?._id);
+    const recipientId = currentChat?.members.find((id) => id !== item?._id);
     socket.emit("sendMessage", { ...newMessage, recipientId });
   }, [newMessage]);
 
@@ -145,7 +181,9 @@ handleFindChat();
         }
       }
       try {
-        
+        console.log('===================recipientId=================');
+        console.log(recipientId);
+        console.log('====================================');
         const firstId = await AsyncStorage.getItem('_id');
         const requestBody = {
           chatId:chatId,
@@ -164,7 +202,7 @@ handleFindChat();
 
 
 
-          socket.emit('sendMessage', { chatId, firstId, text: inputMessage });
+          socket.emit('sendMessage', { message: inputMessage, recipientId: recipientId });
           // Xóa hết dữ liệu trên TextInput
           
     setInputMessage('');
