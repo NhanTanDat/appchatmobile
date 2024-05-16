@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Button, View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { View, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Image, Text } from 'react-native';
 import { baseUrl, getRequest, postRequest } from '../service';
 import IntroduceUser from './IntroduceUser';
 import FriendRequest from './FriendRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function AddfriendModal() {
+function AddFriendModal() {
   const [searchQuery, setSearchQuery] = useState('');
   const [ID, setID] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -16,7 +16,6 @@ function AddfriendModal() {
   const _id = AsyncStorage.getItem('_id');
   let selectedFriendId = null;
   const [responseMessage, setResponseMessage] = useState('');
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,27 +31,7 @@ function AddfriendModal() {
   }, []);
 
   useEffect(() => {
-    // const fetchUsers = async () => {
-    //   setResponseMessage("");
-    //   setIsLoading(true);
-    //   try {
-    //     const apiUrl = `${baseUrl}/users/find/user`;
-    //     const requestBody = { data: searchQuery };
-
-    //     const response = await postRequest(apiUrl, JSON.stringify(requestBody));
-
-    //     if (!response.error) {
-    //       setSearchResults(response);
-    //     } else {
-    //       console.error('Error fetching users:', response.message);
-    //     }
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-
-    // fetchUsers();
-    const Render = async () => {
+    const fetchData = async () => {
       setResponseMessage("");
       setIsLoading(true);
       try {
@@ -71,7 +50,7 @@ function AddfriendModal() {
       }
     };
 
-    Render();
+    fetchData();
   }, [searchQuery]);
 
   const filteredItems = searchResults.filter(item =>
@@ -79,195 +58,132 @@ function AddfriendModal() {
     item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.phone.includes(searchQuery)
   );
+
   const handleSearch = (text) => {
     setSearchQuery(text);
-    console.log('====================================');
-   
-    console.log(searchResults);
-    console.log('====================================');
   };
 
   const handleSelectFriend = (friendId) => {
-     setResponseMessage("Gửi yêu cầu kết bạn thành công")
-    console.log(0)
-    console.log(friendId)
-    
+    setResponseMessage("Gửi yêu cầu kết bạn thành công");
     selectedFriendId = friendId;
-    console.log('====================================');
-    console.log(friendId);
-    console.log('====================================');
     handlesendFriendRequest();
   };
 
-  const handlesendFriendRequest = () => {
-    setID(_id);
-    sendFriendRequest();
+  const handlesendFriendRequest = async () => {
+    const apiUrl = `${baseUrl}/users/sendfriendrequest`;
+    const requestBody = JSON.stringify({ senderId: userId, receiverId: selectedFriendId });
+
+    try {
+      const response = await postRequest(apiUrl, requestBody);
+      if (!response.error) {
+        console.log(response);
+      } else {
+        setResponseMessage(response.message);
+      }
+    } catch (error) {
+      console.error('There was a problem with the registration:', error);
+      setError('An error occurred while registering. Please try again later.');
+    }
   };
 
   const renderItem = ({ item }) => (
-    <View style={{ flexDirection: "row", backgroundColor: "yellow" }}>
-      <TouchableOpacity style={styles.userItem}>
-        <View>
-          <Text>id: {item._id}</Text>
-          <Text>Name: {item.name}</Text>
-          <Text>Email: {item.email}</Text>
-          <Text>Phone: {item.phone}</Text>
-        </View>
-      </TouchableOpacity>
+    <View style={styles.userItem}>
+      <Image source={{ uri: item.avatar }} style={styles.avatar} />
+      <View style={styles.userInfo}>
+        <Text style={styles.userName}>{item.name}</Text>
+        <Text>Email: {item.email}</Text>
+        <Text>Phone: {item.phone}</Text>
+      </View>
       <TouchableOpacity onPress={() => handleSelectFriend(item._id)}>
-        <Text>Kết bạn</Text>
+        <Text style={styles.actionButton}>Kết bạn</Text>
       </TouchableOpacity>
     </View>
   );
 
-  const sendFriendRequest = async () => {
-    
-   
-        
-      const apiUrl = `${baseUrl}/users/sendfriendrequest`;
-      const requestBody = JSON.stringify({  senderId: userId,   receiverId: selectedFriendId });
-console.log('====================================IDID');
-      console.log(selectedFriendId);
-      console.log('====================================');
-
-
-
-      console.log('====================================id');
-      console.log(_id);
-      console.log('====================================');
-      try {
-          const response = await postRequest(apiUrl, requestBody);
-
-          if (!response.error) {
-                console.log(response);
-               
-          } else {
-           setResponseMessage(response.message);
-          }
-      } catch (error) {
-          console.error('There was a problem with the registration:', error);
-          setError('An error occurred while registering. Please try again later.');
-      }
-  
-    
-      // console.log('====================================IDID');
-      // console.log(selectedFriendId);
-      // console.log('====================================');
-
-
-
-      // console.log('====================================id');
-      // console.log(_id);
-      // console.log('====================================');
-      // const apiUrl = `${baseUrl}/users/sendfriendrequest`;
-      // const requestBody = {
-      //   senderId: _id,
-      //   receiverId: selectedFriendId
-      // };
-      // const response = await postRequest(apiUrl, JSON.stringify(requestBody));
-
-      // if (response.error) {
-      //   console.error('Error sending friend request:', response.message);
-      //   setResponseMessage(response.message);
-      //   throw new Error('Failed to send friend request');
-      // }
-
-      // if (!response.error) {
-      //   console.log(response);
-      // }
-
-    
-  };
-
-   return (
-
-//   <ScrollView style={{ width: "100%", height: "100%" }}>
-//   <View style={styles.container}>
-//     <View style={styles.searchContainer}>
-//       <TextInput
-//         placeholder="Enter phone, name, or email"
-//         value={searchQuery}
-//         onChangeText={handleSearch}
-//         style={styles.input}
-//       />
-      // {searchQuery !== '' && !isLoading ? (
-      //   <FlatList
-      //     data={searchResults}
-      //     keyExtractor={(item, index) => index.toString()}
-      //     renderItem={renderItem}
-      //     style={styles.list}
-      //   />
-      // ) : null}
-      // {isLoading ? <ActivityIndicator size="small" /> : null}
-//     </View>
-//     <Text>{responseMessage}</Text>
-//     
-//   </View>
-// </ScrollView>
-<View style={styles.container}>
-<View style={styles.searchContainer}>
-       <TextInput
-      placeholder="Nhập số điện thoại, tên, email để tìm kiếm"
-         value={searchQuery}
-         onChangeText={handleSearch}
-        style={styles.input}
-      />
-      {searchQuery !== '' && !isLoading ? (
-        <FlatList
-          data={filteredItems}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          style={styles.list}
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <TextInput
+          placeholder="Nhập số điện thoại, tên, email để tìm kiếm"
+          value={searchQuery}
+          onChangeText={handleSearch}
+          style={styles.input}
         />
-      ) : null}
-      {isLoading ? <ActivityIndicator size="small" /> : null}
-      <Text>{responseMessage}</Text>
-       
-     </View>
-     <View style={{ width: '100%', height: '100%', flex: 1 }}>
-      <FriendRequest></FriendRequest>
-       <IntroduceUser></IntroduceUser>
-     </View>
-
-</View>
+        {searchQuery !== '' && !isLoading ? (
+          <FlatList
+            data={filteredItems}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderItem}
+            style={styles.list}
+          />
+        ) : null}
+        {isLoading ? <ActivityIndicator size="small" /> : null}
+        <Text>{responseMessage}</Text>
+      </View>
+      <View style={styles.additionalInfo}>
+        <FriendRequest />
+        <IntroduceUser />
+      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'rgb(0, 204, 255)',
+    backgroundColor: '#E6F7FF',
     width: '100%',
-    height:"100%"
   },
   searchContainer: {
-    flexDirection: 'column',
-    backgroundColor: 'rgb(0, 204, 255)',
-    width: "100%",
-    height:"30%"
+    width: '100%',
+    padding: 20,
+    backgroundColor: '#E6F7FF',
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
-    marginBottom: 10,height:50,
-    backgroundColor:"white"
-    
+    borderRadius: 25,
+    backgroundColor: 'white',
+    fontSize: 16,
+    marginBottom: 10,
   },
   list: {
-    flex: 1,
+    marginTop: 10,
   },
   userItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    width: "80%"
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  userInfo: {
+    flex: 1,
   },
   userName: {
     fontWeight: 'bold',
-  }
+    fontSize: 18,
+  },
+  actionButton: {
+    color: '#007bff',
+    fontWeight: 'bold',
+  },
+  additionalInfo: {
+    width: '100%',
+    padding: 20,
+  },
 });
 
-export default AddfriendModal;
+export default AddFriendModal;

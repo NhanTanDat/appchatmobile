@@ -360,30 +360,28 @@ handleFindChat();
 
 const styles = StyleSheet.create({
   container: {
-    height:windowHeight*0.9,
-    backgroundColor: '#fff',
-   padding:5,
-    width:windowWidth*1
+    height: windowHeight * 0.9,
+    backgroundColor: '#ADD8E6', // Light blue color
+    padding: 5,
+    width: windowWidth * 1
   },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-   
-    height:"10%",
-    width: windowWidth *1
+    height: "10%",
+    width: windowWidth * 1
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center"
   },
   chatContainer: {
-   
-    width:windowWidth*1,
-    height:windowHeight*0.68,
-    backgroundColor:"red"
+    width: windowWidth * 1,
+    height: windowHeight * 0.68,
+    backgroundColor: "#ADD8E6" // Light blue color
   },
   message: {
     maxWidth: '70%',
@@ -396,7 +394,6 @@ const styles = StyleSheet.create({
   },
   messagesContainer: {
     flexGrow: 1,
-    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -431,8 +428,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  }, avatar: {
-    marginLeft:20,
+  },
+  avatar: {
+    marginLeft: 20,
     width: 100,
     height: 100,
     borderRadius: 50,
