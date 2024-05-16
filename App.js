@@ -13,6 +13,7 @@ import Home from './modules/Home/Home';
 
 import Message from './modules/Chat/Chat';
 import ChatBox from './modules/Chat/Chatbox';
+import Story from './modules/Home/Story';
 
 
 const Stack = createStackNavigator();
@@ -31,6 +32,7 @@ export default function App() {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Message" component={Message} />
         <Stack.Screen name="ChatBox" component={ChatBox} />
+        <Stack.Screen name="Story" component={Story} />
           
       </Stack.Navigator>
     </NavigationContainer>

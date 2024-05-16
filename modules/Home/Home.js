@@ -122,6 +122,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Message from '../Chat/Chat';
 import ProfileScreen from './ProfileScreen';
 import AddfriendModal from './AddfriendModal';
+import Story from './Story';
 
 function Screen1() {
   return (
@@ -185,7 +186,7 @@ export default function App() {
         <Icon2 name="adduser" size={size} color={color} /> // Example: Using the Facebook brand icon
       ),
     }}  />
-          <Tab.Screen name="Screen3" component={Screen3} />
+          <Tab.Screen name="Story" component={Story} />
           <Tab.Screen name="My Info" component={ProfileScreen} options={{
       tabBarIcon: ({ color, size }) => (
         <Icon name="user" size={size} color={color} /> // Example: Using the Facebook brand icon
