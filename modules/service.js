@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const baseUrl = "http://192.168.1.6:3000/api";//3000 đâu? đổi cái phần t tô nè
+export const baseUrl = "http://192.168.0.26:3000/api";//3000 đâu? đổi cái phần t tô nè
 
 
 export const postRequest = async (url, body) => {

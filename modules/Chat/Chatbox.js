@@ -12,7 +12,7 @@ const ChatBox = ({ route }) => {
   
 
   const { item } = route.params;
-  //const [firstId, setFirstId] = useState('');
+  const [firstId, setFirstId] = useState('');
   const [secondId, setSecondId] = useState('');
   const [chat, setChat] = useState('');
   const [chatId, setChatId] = useState('');
@@ -51,7 +51,7 @@ const ChatBox = ({ route }) => {
   
 
   useEffect(() => {
-    const newSocket = io(`http://192.168.0.35:80`); // Thay đổi URL server tương ứng
+    const newSocket = io(`http://192.168.0.26:80`); // Thay đổi URL server tương ứng
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();
@@ -177,6 +177,7 @@ handleFindChat();
       try {
         setSecondId(item._id)
         const firstId = await AsyncStorage.getItem('_id');
+        setFirstId(firstId);
         
         const url = `${baseUrl}/chats/find/${firstId}/${item._id}`; 
         const response = await getRequest(url);
@@ -313,7 +314,8 @@ handleFindChat();
     <View
       style={[
         styles.message,
-        { alignSelf: item.sender === 'me' ? 'flex-end' : 'flex-start' },
+        { alignSelf: item.senderId === firstId ? 'flex-end' : 'flex-start' },
+        { backgroundColor: item.senderId === firstId ? 'white' : 'white' }
       ]}
     >
       <Text style={styles.messageText}>{item.text}</Text>
@@ -386,14 +388,14 @@ const styles = StyleSheet.create({
   message: {
     maxWidth: '70%',
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 20,
     marginVertical: 5
   },
   messageText: {
     fontSize: 16,
   },
   messagesContainer: {
-    flexGrow: 1,
+    flexGrow: 1,margin:20
   },
   inputContainer: {
     flexDirection: 'row',
