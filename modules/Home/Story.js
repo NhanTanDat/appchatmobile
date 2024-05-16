@@ -15,5 +15,4 @@ const Story = () => {
     );
 };
 
-export default Story;
-///sửa ở file này nha ,,
+export default Story;/////Ví dụ code đang đc sửa
